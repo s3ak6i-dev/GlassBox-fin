@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "glassbox-fin"
+version = "0.1.0a1"
+description = "Real-time compliance guardrails and audit trails for financial LLM agents"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+dependencies = ["reportlab>=4.0"]
+
+[project.optional-dependencies]
+langchain  = ["langchain-core>=0.1.0"]
+llamaindex = ["llama-index-core>=0.10.0"]
+openai     = ["openai>=1.0.0"]
+anthropic  = ["anthropic>=0.20.0"]
+dev        = ["pytest>=7", "pytest-cov", "ruff"]
+all        = ["glassbox-fin[langchain,llamaindex,openai,anthropic,dev]"]
+
+[project.scripts]
+glassbox-fin = "glassbox.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["glassbox"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

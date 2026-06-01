@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GlassBox — Stop your agents before they break the rules</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="glassbox.css" />
+</head>
+<body style="background-color: rgb(0, 0, 0)">
+
+<!-- ============================ NAV ============================ -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand"><b>glass</b>box<span class="dot">·</span>fin</a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#guardrails">Guardrails</a>
+      <a href="#rules">Rules</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <a href="#install" class="pill">
+      <span>pip install glassbox-fin</span>
+      <span class="arr">→</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ============================ HERO ============================ -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">
+        <span class="rule"></span>
+        OPEN-SOURCE COMPLIANCE RUNTIME
+        <span class="dim">v0.1.0-alpha</span>
+      </div>
+      <h1>Stop your financial<br />agents before they<br />break <span class="accent">the rules</span>.</h1>
+      <p class="sub">A Python middleware library that intercepts every LLM call and tool invocation your agent makes — <strong>checking it against financial regulation in real time</strong>. Block violations before they execute. Generate audit trails your compliance team can actually use. <em>See straight into the box.</em></p>
+      <div class="hero-cta">
+        <a href="#install" class="btn btn-primary">Get started <span>→</span></a>
+        <button class="btn btn-code" id="hero-copy"><span class="dollar">$</span> pip install glassbox-fin</button>
+      </div>
+    </div>
+
+    <!-- hero visual: four switchable cursor-tracked scenes -->
+    <div class="cube-stage" id="cubeStage">
+      <div class="cube-glow"></div>
+
+      <!-- A · GLASS CUBE -->
+      <div class="viz viz-cube active" data-viz="cube">
+        <div class="cube-scene">
+          <div class="cube rotor" id="cube" data-mode="spin" data-basex="-18">
+            <div class="face fr"></div>
+            <div class="face bk"></div>
+            <div class="face rt"></div>
+            <div class="face lf"></div>
+            <div class="face tp"></div>
+            <div class="face bt"></div>
+            <span class="vtx" style="transform: translate3d(-110px,-110px,-110px);"></span>
+            <span class="vtx" style="transform: translate3d(110px,-110px,-110px);"></span>
+            <span class="vtx" style="transform: translate3d(-110px,110px,-110px);"></span>
+            <span class="vtx" style="transform: translate3d(110px,110px,-110px);"></span>
+            <span class="vtx" style="transform: translate3d(-110px,-110px,110px);"></span>
+            <span class="vtx" style="transform: translate3d(110px,-110px,110px);"></span>
+            <span class="vtx" style="transform: translate3d(-110px,110px,110px);"></span>
+            <span class="vtx" style="transform: translate3d(110px,110px,110px);"></span>
+            <div class="cube-core"></div>
+            <div class="plate p1"><i></i><i></i></div>
+            <div class="plate p2"><i></i><i></i><i></i></div>
+            <div class="plate p3"><i></i><i></i></div>
+          </div>
+        </div>
+        <div class="cube-caustic"></div>
+      </div>
+
+      <!-- B · EXPLODED BOX -->
+      <div class="viz viz-explode" data-viz="explode">
+        <div class="explode rotor" data-mode="spin" data-basex="-16">
+          <div class="ef fr"></div>
+          <div class="ef bk"></div>
+          <div class="ef rt"></div>
+          <div class="ef lf"></div>
+          <div class="ef tp"></div>
+          <div class="ef bt"></div>
+          <div class="layer l1"><span class="lt">Trace</span><span class="ld">every call · every tool</span></div>
+          <div class="layer l2"><span class="lt">Rules</span><span class="ld">pii · dti · jurisdiction</span></div>
+          <div class="layer l3"><span class="lt">Lineage</span><span class="ld">decision → narrative</span></div>
+        </div>
+      </div>
+
+      <!-- C · TRACE IN BOX -->
+      <div class="viz viz-trace" data-viz="trace">
+        <div class="tracebox rotor" data-mode="tilt" data-basex="6" data-basey="0">
+          <div class="frame boxed">
+            <span class="bracket tl"></span><span class="bracket tr"></span>
+            <span class="bracket bl"></span><span class="bracket br"></span>
+          </div>
+          <svg class="edges" viewBox="0 0 320 250" preserveAspectRatio="none">
+            <line x1="58" y1="52" x2="150" y2="120"></line>
+            <line x1="150" y1="120" x2="250" y2="64" class="flag"></line>
+            <line x1="150" y1="120" x2="170" y2="196" class="flag"></line>
+          </svg>
+          <div class="tnode" style="left: 14px; top: 36px; transform: translateZ(26px);"><span class="nh">llm.call</span><span class="ns">assess #42</span></div>
+          <div class="tnode" style="left: 108px; top: 104px; transform: translateZ(8px);"><span class="nh">get_credit_score</span><span class="ns">score 612</span></div>
+          <div class="tnode flag" style="left: 206px; top: 44px; transform: translateZ(38px);"><span class="nh">send_email ⚠</span><span class="ns">PII · BSN leaked</span></div>
+          <div class="tnode flag" style="left: 118px; top: 180px; transform: translateZ(30px);"><span class="nh">decision: APPROVE</span><span class="ns">DTI rationale missing</span></div>
+        </div>
+      </div>
+
+      <!-- D · LAYERED PANES -->
+      <div class="viz viz-panes" data-viz="panes">
+        <div class="panes rotor" data-mode="tilt" data-basex="15" data-basey="-24">
+          <div class="pane p1"><span class="pl">Session</span><div class="pbars"><i></i><i></i><i></i></div></div>
+          <div class="pane p2"><span class="pl">Trace</span><div class="pbars"><i></i><i></i><i></i></div></div>
+          <div class="pane p3"><span class="pl">Rules</span><div class="pbars"><i></i><i></i><i></i></div></div>
+          <div class="pane p4"><span class="pl">Report</span><div class="pbars"><i></i><i></i><i></i></div></div>
+        </div>
+      </div>
+
+      <!-- E · BLACK BOX → GLASS BOX -->
+      <div class="viz viz-morph" data-viz="morph">
+        <div class="morph rotor" data-mode="spin" data-basex="-18">
+          <div class="mface fr"><div class="skin solid"></div><div class="skin glass"></div></div>
+          <div class="mface bk"><div class="skin solid"></div><div class="skin glass"></div></div>
+          <div class="mface rt"><div class="skin solid"></div><div class="skin glass"></div></div>
+          <div class="mface lf"><div class="skin solid"></div><div class="skin glass"></div></div>
+          <div class="mface tp"><div class="skin solid"></div><div class="skin glass"></div></div>
+          <div class="mface bt"><div class="skin solid"></div><div class="skin glass"></div></div>
+          <div class="mlayer l1"><span class="lt">Trace</span><span class="ld">every call · every tool</span></div>
+          <div class="mlayer l2"><span class="lt">Rules</span><span class="ld">pii · dti · jurisdiction</span></div>
+          <div class="mlayer l3"><span class="lt">Lineage</span><span class="ld">decision → narrative</span></div>
+        </div>
+      </div>
+
+      <!-- F · BLACK BOX vs GLASS BOX -->
+      <div class="viz viz-versus" data-viz="versus">
+        <div class="versus rotor" data-mode="tilt" data-basex="4" data-basey="0">
+          <div class="vbox left">
+            <div class="vf fr"></div><div class="vf bk"></div><div class="vf rt"></div>
+            <div class="vf lf"></div><div class="vf tp"></div><div class="vf bt"></div>
+          </div>
+          <div class="vbox right">
+            <div class="vf fr"></div><div class="vf bk"></div><div class="vf rt"></div>
+            <div class="vf lf"></div><div class="vf tp"></div><div class="vf bt"></div>
+          </div>
+          <span class="vlabel l">black box</span>
+          <span class="vs">vs</span>
+          <span class="vlabel r">glass box</span>
+        </div>
+      </div>
+
+      <!-- G · RULE GATES -->
+      <div class="viz viz-gates" data-viz="gates">
+        <div class="gates rotor" data-mode="tilt" data-basex="8" data-basey="-4">
+          <div class="grail"></div>
+          <div class="gate g1"><span class="glab">PII</span></div>
+          <div class="gate g2"><span class="glab">SOURCE</span></div>
+          <div class="gate g3 fail"><span class="glab">DTI ✗</span></div>
+          <div class="gate g4"><span class="glab">JURISDICTION</span></div>
+          <div class="gtoken"></div>
+        </div>
+      </div>
+
+      <!-- H · REGULATION SEALS -->
+      <div class="viz viz-seals" data-viz="seals">
+        <div class="seals rotor" data-mode="tilt" data-basex="15" data-basey="0">
+          <div class="sbox"><span class="sk">✓</span><span class="st">decision</span></div>
+          <div class="ring">
+            <div class="slot" style="--a: 0deg;"><div class="unspin"><span class="seal">EU AI Act</span></div></div>
+            <div class="slot" style="--a: 90deg;"><div class="unspin"><span class="seal flag">MiFID II</span></div></div>
+            <div class="slot" style="--a: 180deg;"><div class="unspin"><span class="seal">GDPR</span></div></div>
+            <div class="slot" style="--a: 270deg;"><div class="unspin"><span class="seal">Basel III</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- I · CUBE OF CUBES (drag · inertia · explode) -->
+      <div class="viz viz-voxel" data-viz="voxel">
+        <div class="voxel rotor" id="voxel"></div>
+        <div class="voxel-tip" id="voxelTip"></div>
+        <div class="voxel-hint">drag to spin · hover a cell · <b>click to explode</b></div>
+      </div>
+
+      <div class="cube-tag t1">agent <b>·</b> transparent</div>
+      <div class="cube-tag t2"><b>4</b> steps traced</div>
+      <div class="cube-tag t3"><b>2</b> violations caught</div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== LIVE AUDIT TERMINAL ===================== -->
+<section class="audit" id="trace" style="padding-top: 20px;">
+  <div class="wrap">
+    <div class="section-label">LIVE — agent_trace.audit() · loan_decision_42</div>
+    <p class="lead">One loan decision, replayed. Four steps traced, two violations caught — <em>before the agent ever shipped its answer</em>.</p>
+    <div class="boxed terminal-wrap reveal">
+      <span class="bracket tl"></span><span class="bracket tr"></span>
+      <span class="bracket bl"></span><span class="bracket br"></span>
+      <div class="terminal">
+        <div class="term-bar">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <div class="term-title">glassbox ▸ audit session ▸ loan_decision_42</div>
+          <div class="live-badge"><span class="blink"></span> Live</div>
+        </div>
+        <div class="term-body" id="termBody">
+          <div class="trace-row" data-step>
+            <span class="idx">01</span>
+            <span class="ts">+0.00s</span>
+            <span class="body"><span class="kw">llm.call</span> <span class="k">model</span>=<span class="str">"gpt-4o"</span> <span class="k">prompt</span>=<span class="str">"Assess loan application #42…"</span></span>
+            <span class="status pass">✓ traced</span>
+          </div>
+          <div class="trace-row" data-step>
+            <span class="idx">02</span>
+            <span class="ts">+1.34s</span>
+            <span class="body"><span class="kw">tool.call</span> <span class="k">name</span>=<span class="str">"get_credit_score"</span> <span class="k">args</span>={<span class="k">applicant</span>:<span class="str">"M. de Vries"</span>, <span class="k">score</span>:<span class="num">612</span>}</span>
+            <span class="status pass">✓ traced</span>
+          </div>
+          <div class="trace-row flagged" data-step data-flag>
+            <span class="idx">03</span>
+            <span class="ts">+2.07s</span>
+            <span class="body"><span class="kw">tool.call</span> <span class="k">name</span>=<span class="str">"send_email"</span> <span class="k">body</span>=<span class="str">"…BSN <span class="num">8412.95.302</span> approved…"</span> <span class="bool">⚠ pii</span></span>
+            <span class="status fail">✗ flagged</span>
+          </div>
+          <div class="trace-row flagged" data-step data-flag>
+            <span class="idx">04</span>
+            <span class="ts">+2.51s</span>
+            <span class="body"><span class="kw">decision</span> <span class="k">outcome</span>=<span class="str">"APPROVE"</span> <span class="k">rationale</span>=<span class="bool">null</span> <span class="k">dti</span>=<span class="bool">missing</span></span>
+            <span class="status warn">! review</span>
+          </div>
+        </div>
+        <div class="violation-bar" id="vio1" data-vio>
+          <span class="vicon">▲</span>
+          <b>PII_IN_TOOL_ARGS</b>
+          <span class="vrule">— Dutch BSN national ID leaked into email body</span>
+          <span class="sep">·</span>
+          <span class="sev">CRITICAL · GDPR Art.9 · EU AI Act Art.10</span>
+        </div>
+        <div class="violation-bar" id="vio2" data-vio>
+          <span class="vicon">▲</span>
+          <b>MISSING_DTI_RATIONALE</b>
+          <span class="vrule">— loan approved with no debt-to-income reasoning recorded</span>
+          <span class="sep">·</span>
+          <span class="sev">HIGH · EU AI Act Art.13 · EBA GL/2020/06</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ===================== WHAT IT DOES ===================== -->
+<section id="how">
+  <div class="wrap">
+    <div class="section-label reveal">WHAT'S IN THE BOX — four layers</div>
+    <p class="lead reveal">Most agents are a black box: a decision comes out, the reasoning stays in. GlassBox opens it in <em>four moves</em>.</p>
+    <div class="cards reveal" id="pipeline">
+      <div class="card boxed step active" data-step="0" role="button" tabindex="0" aria-label="Step 1: Intercept">
+        <span class="bracket tl"></span><span class="bracket br"></span>
+        <span class="num">01 — INTERCEPT</span>
+        <h3>Trace interception</h3>
+        <p>Wraps every LLM call and tool invocation across LangChain, LlamaIndex, and raw API usage — with <strong>zero changes to your agent logic</strong>. If it runs, it's on the record.</p>
+        <div class="tags">
+          <span class="chip blue">LangChain</span>
+          <span class="chip blue">LlamaIndex</span>
+          <span class="chip">framework-agnostic</span>
+        </div>
+        <span class="stepbar"></span>
+      </div>
+      <div class="card boxed step" id="guardrails" data-step="1" role="button" tabindex="0" aria-label="Step 2: Enforce">
+        <span class="bracket tl"></span><span class="bracket br"></span>
+        <span class="num">02 — ENFORCE</span>
+        <h3>Real-time guardrails</h3>
+        <p>Violations are caught at the call boundary — <strong>before the tool executes, before the data leaves</strong>. Configure per-severity responses: block automatically, pause for human approval, or log and continue. The agent cannot proceed without your sign-off.</p>
+        <div class="tags">
+          <span class="chip">pre-call</span>
+          <span class="chip">human approval</span>
+          <span class="chip blue">Apache 2.0</span>
+        </div>
+        <span class="stepbar"></span>
+      </div>
+      <div class="card boxed step" data-step="2" role="button" tabindex="0" aria-label="Step 3: Check">
+        <span class="bracket tl"></span><span class="bracket br"></span>
+        <span class="num">03 — CHECK</span>
+        <h3>Financial rule engine</h3>
+        <p>Eight built-in rules covering GDPR, EU AI Act, MiFID II, and Basel III — <strong>each mapped to the exact article it answers</strong>. Write custom rules in plain Python and plug them in alongside the defaults.</p>
+        <div class="tags">
+          <span class="chip">PII</span>
+          <span class="chip">thresholds</span>
+          <span class="chip">jurisdiction</span>
+        </div>
+        <span class="stepbar"></span>
+      </div>
+      <div class="card boxed step" data-step="3" role="button" tabindex="0" aria-label="Step 4: Explain">
+        <span class="bracket tl"></span><span class="bracket br"></span>
+        <span class="num">04 — EXPLAIN</span>
+        <h3>Decision lineage</h3>
+        <p>Turns a tangled multi-step trace into a human-readable narrative of how the agent reached its decision — <strong>including every guardrail event and approval</strong>. Exportable as a compliance-ready PDF your auditors can sign off on.</p>
+        <div class="tags">
+          <span class="chip">narrative</span>
+          <span class="chip">PDF export</span>
+          <span class="chip blue">audit-ready</span>
+        </div>
+        <span class="stepbar"></span>
+      </div>
+    </div>
+
+    <!-- interactive demo stage, driven by the active step -->
+    <div class="how-demo reveal">
+      <div class="demo-head">
+        <span class="demo-dot"></span>
+        <span id="demoTitle"><b>interception</b> · any framework, one wrapper</span>
+      </div>
+      <div class="demo-body">
+        <!-- 0 · INTERCEPT -->
+        <div class="demo-pane active" data-pane="0">
+          <div class="pane-row">
+            <div class="seg" id="fwSeg">
+              <button class="seg-opt active" data-fw="langchain">LangChain</button>
+              <button class="seg-opt" data-fw="llamaindex">LlamaIndex</button>
+              <button class="seg-opt" data-fw="raw">Raw API</button>
+            </div>
+            <span class="cap-badge"><b>4</b> calls captured</span>
+          </div>
+          <pre class="demo-code" id="fwCode">audit.wrap(agent_executor)</pre>
+          <div class="cap-list">
+            <div class="cap"><span class="ci">→</span><span class="cn">llm.call</span><span class="cm">model=gpt-4o</span></div>
+            <div class="cap"><span class="ci">→</span><span class="cn">tool.call</span><span class="cm">get_credit_score</span></div>
+            <div class="cap"><span class="ci">→</span><span class="cn">tool.call</span><span class="cm">send_email</span></div>
+            <div class="cap"><span class="ci">→</span><span class="cn">decision</span><span class="cm">APPROVE</span></div>
+          </div>
+          <p class="pane-note">Same trace, whatever the framework — GlassBox sits under the call, not inside your logic.</p>
+        </div>
+
+        <!-- 1 · ENFORCE -->
+        <div class="demo-pane" data-pane="1">
+          <div class="enforce-grid">
+            <div>
+              <div class="policy-head">guardrail policy · per severity</div>
+              <div class="prow">
+                <span class="psev critical">critical</span>
+                <div class="seg sm" data-pol="critical">
+                  <button class="seg-opt" data-act="block">Block</button>
+                  <button class="seg-opt active" data-act="pause">Pause</button>
+                  <button class="seg-opt" data-act="log">Log</button>
+                </div>
+              </div>
+              <div class="prow">
+                <span class="psev high">high</span>
+                <div class="seg sm" data-pol="high">
+                  <button class="seg-opt" data-act="block">Block</button>
+                  <button class="seg-opt active" data-act="pause">Pause</button>
+                  <button class="seg-opt" data-act="log">Log</button>
+                </div>
+              </div>
+              <div class="prow">
+                <span class="psev medium">medium</span>
+                <div class="seg sm" data-pol="medium">
+                  <button class="seg-opt" data-act="block">Block</button>
+                  <button class="seg-opt" data-act="pause">Pause</button>
+                  <button class="seg-opt active" data-act="log">Log</button>
+                </div>
+              </div>
+            </div>
+            <div class="boundary">
+              <div class="bnd-call">
+                <span class="bnd-tool">send_email(body="…BSN…")</span>
+                <span class="bnd-sev critical">CRITICAL · PII</span>
+              </div>
+              <div class="bnd-divider">call boundary</div>
+              <button class="run-btn" id="enfRun">▶ agent attempts the call</button>
+              <div class="bnd-result" id="enfResult"></div>
+            </div>
+          </div>
+          <p class="pane-note">The guardrail fires at the call boundary — the tool never runs until your policy says it can.</p>
+        </div>
+
+        <!-- 2 · CHECK -->
+        <div class="demo-pane" data-pane="2">
+          <div class="check-grid">
+            <div>
+              <div class="toggles" id="checkTogs">
+                <div class="tog on" data-rule="pii" role="switch" tabindex="0" aria-checked="true"><span class="sw"></span><span class="tlab">PII exposure</span></div>
+                <div class="tog on" data-rule="dti" role="switch" tabindex="0" aria-checked="true"><span class="sw"></span><span class="tlab">DTI rationale</span></div>
+                <div class="tog on" data-rule="jur" role="switch" tabindex="0" aria-checked="true"><span class="sw"></span><span class="tlab">Jurisdiction</span></div>
+                <div class="tog on" data-rule="thr" role="switch" tabindex="0" aria-checked="true"><span class="sw"></span><span class="tlab">Threshold</span></div>
+              </div>
+              <div class="verdict">
+                <span class="vbig" id="vCount">4</span>
+                <span class="vtxt"><b id="vClause">violations caught</b><br />in loan_decision_42</span>
+              </div>
+            </div>
+            <div class="check-right" id="checkTrace">
+              <div class="vrow" data-s="s1"><span class="vlabel">get_credit_score · ruleset=US · client=EU</span><span class="vs"></span></div>
+              <div class="vrow" data-s="s2"><span class="vlabel">send_email · body="…BSN 8412.95.302…"</span><span class="vs"></span></div>
+              <div class="vrow" data-s="s3"><span class="vlabel">approve · exposure=1.4M · limit=1.0M</span><span class="vs"></span></div>
+              <div class="vrow" data-s="s4"><span class="vlabel">decision=APPROVE · rationale=null</span><span class="vs"></span></div>
+            </div>
+          </div>
+          <p class="pane-note">Flip a rule off and the trace re-scores live — every check is independent and carries its own regulation.</p>
+        </div>
+
+        <!-- 3 · EXPLAIN -->
+        <div class="demo-pane" data-pane="3">
+          <div class="seg" id="exSeg">
+            <button class="seg-opt active" data-view="raw">Raw trace</button>
+            <button class="seg-opt" data-view="narr">Narrative</button>
+          </div>
+          <div class="explain-out">
+            <pre class="explain-raw" id="exRaw"><span class="jk">{</span>
+  <span class="jk">"session":</span> <span class="js">"loan_decision_42"</span>,
+  <span class="jk">"steps":</span> <span class="jn">4</span>,
+  <span class="jk">"violations":</span> [
+    { <span class="jk">"rule":</span> <span class="jf">"PII_IN_TOOL_ARGS"</span>, <span class="jk">"step":</span> <span class="jn">3</span> },
+    { <span class="jk">"rule":</span> <span class="jf">"MISSING_DTI_RATIONALE"</span>, <span class="jk">"step":</span> <span class="jn">4</span> }
+  ]
+<span class="jk">}</span></pre>
+            <div class="explain-narr" id="exNarr" style="display: none;">At <b>14:02</b>, the agent pulled applicant M. de Vries's credit score (612), then attempted to send an approval email embedding the applicant's <span class="flag">Dutch BSN — a national identifier</span>. The guardrail <b>paused the send for approval, and it was denied</b> — the email never left. It also recorded an <b>APPROVE</b> decision with <span class="flag">no debt-to-income rationale attached</span>. Every event, block, and approval is on file.</div>
+          </div>
+          <button class="pdf-btn" id="pdfBtn"><span class="pi">↧</span> <span class="pt">Export compliance.pdf</span></button>
+          <p class="pane-note">The same trace, two ways: a machine-readable record, and the story an auditor can actually read.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RULES ===================== -->
+<section id="rules" style="padding-top: 30px;">
+  <div class="wrap">
+    <div class="section-label reveal">BUILT-IN RULES — severity · regulation</div>
+    <p class="lead reveal">Eight checks ship in the box. Write your own in a few lines of Python — <em>each carries the regulation it enforces</em>.</p>
+    <div class="rules-toolbar reveal">
+      <div class="filter-pills" id="sevFilters">
+        <button class="filter-pill active" data-sev="all">All</button>
+        <button class="filter-pill" data-sev="critical">Critical</button>
+        <button class="filter-pill" data-sev="high">High</button>
+        <button class="filter-pill" data-sev="medium">Medium</button>
+      </div>
+      <input type="text" class="rules-search" id="ruleSearch" placeholder="search rules…" aria-label="Search rules" />
+      <span class="rules-count" id="ruleCount"><b>8</b> of 8 rules</span>
+    </div>
+    <div class="rules-grid reveal" id="rulesGrid">
+      <div class="rule-row" data-sev="critical" data-name="PII_IN_TOOL_ARGS">
+        <span class="sev-tag critical">critical</span>
+        <span class="rule-name">PII_IN_TOOL_ARGS</span>
+        <span class="rule-reg">GDPR Art.9
+EU AI Act Art.10</span>
+        <span class="rule-exp">+</span>
+        <div class="rule-detail">
+          <p class="rd-what">Personal identifiers — <strong>national IDs, account numbers, full names</strong> — passed into a tool argument or model prompt where they'll be logged or sent on.</p>
+          <div class="rd-ex"><span class="rd-lbl">caught</span><code>send_email(body="…BSN 8412.95.302 approved…")</code></div>
+        </div>
+      </div>
+      <div class="rule-row" data-sev="critical" data-name="DECISION_WITHOUT_TRACE">
+        <span class="sev-tag critical">critical</span>
+        <span class="rule-name">DECISION_WITHOUT_TRACE</span>
+        <span class="rule-reg">EU AI Act Art.13</span>
+        <span class="rule-exp">+</span>
+        <div class="rule-detail">
+          <p class="rd-what">A final decision emitted with <strong>no recorded chain of calls</strong> behind it. What you can't reconstruct, you can't defend.</p>
+          <div class="rd-ex"><span class="rd-lbl">caught</span><code>decision="APPROVE"  trace=[]</code></div>
+        </div>
+      </div>
+      <div class="rule-row" data-sev="high" data-name="MISSING_DTI_RATIONALE">
+        <span class="sev-tag high">high</span>
+        <span class="rule-name">MISSING_DTI_RATIONALE</span>
+        <span class="rule-reg">EBA GL/2020/06</span>
+        <span class="rule-exp">+</span>
+        <div class="rule-detail">
+          <p class="rd-what">A credit decision recorded with <strong>no debt-to-income reasoning</strong> attached — the single most-requested artifact in a lending audit.</p>
+          <div class="rd-ex"><span class="rd-lbl">caught</span><code>decision="APPROVE"  rationale=null  dti=missing</code></div>
+        </div>
+      </div>
+      <div class="rule-row" data-sev="high" data-name="JURISDICTION_MISMATCH">
+        <span class="sev-tag high">high</span>
+        <span class="rule-name">JURISDICTION_MISMATCH</span>
+        <span class="rule-reg">MiFID II Art.24</span>
+        <span class="rule-exp">+</span>
+        <div class="rule-detail">
+          <p class="rd-what">Rules or data from the <strong>wrong jurisdiction</strong> applied to the customer in front of the agent.</p>
+          <div class="rd-ex"><span class="rd-lbl">caught</span><code>apply(ruleset="US")  client.region="EU"</code></div>
+        </div>
+      </div>
+      <div class="rule-row" data-sev="high" data-name="THRESHOLD_BYPASS">
+        <span class="sev-tag high">high</span>
+        <span class="rule-name">THRESHOLD_BYPASS</span>
+        <span class="rule-reg">Basel III · LCR</span>
+        <span class="rule-exp">+</span>
+        <div class="rule-detail">
+          <p class="rd-what">A risk or liquidity limit crossed <strong>without the escalation</strong> the policy requires.</p>
+          <div class="rd-ex"><span class="rd-lbl">caught</span><code>exposure=1.4M  limit=1.0M  review=none</code></div>
+        </div>
+      </div>
+      <div class="rule-row" data-sev="medium" data-name="UNVERIFIED_DATA_SOURCE">
+        <span class="sev-tag medium">medium</span>
+        <span class="rule-name">UNVERIFIED_DATA_SOURCE</span>
+        <span class="rule-reg">EU AI Act Art.10</span>
+        <span class="rule-exp">+</span>
+        <div class="rule-detail">
+          <p class="rd-what">A decision that leaned on data from a source <strong>never added to the allowlist</strong>.</p>
+          <div class="rd-ex"><span class="rd-lbl">caught</span><code>get_credit_score(src="3rd-party-api")  verified=false</code></div>
+        </div>
+      </div>
+      <div class="rule-row" data-sev="medium" data-name="STALE_MARKET_CONTEXT">
+        <span class="sev-tag medium">medium</span>
+        <span class="rule-name">STALE_MARKET_CONTEXT</span>
+        <span class="rule-reg">MiFID II Art.25</span>
+        <span class="rule-exp">+</span>
+        <div class="rule-detail">
+          <p class="rd-what">Market data used in the decision is <strong>older than its freshness window</strong>.</p>
+          <div class="rd-ex"><span class="rd-lbl">caught</span><code>quote.age=41m  window=15m</code></div>
+        </div>
+      </div>
+      <div class="rule-row" data-sev="medium" data-name="RETENTION_WINDOW_EXCEEDED">
+        <span class="sev-tag medium">medium</span>
+        <span class="rule-name">RETENTION_WINDOW_EXCEEDED</span>
+        <span class="rule-reg">GDPR Art.5(1)(e)</span>
+        <span class="rule-exp">+</span>
+        <div class="rule-detail">
+          <p class="rd-what">Personal data still present in the trace <strong>past its permitted retention period</strong>.</p>
+          <div class="rd-ex"><span class="rd-lbl">caught</span><code>pii.age=38d  retention=30d</code></div>
+        </div>
+      </div>
+      <div class="rules-empty" id="rulesEmpty">No rules match — try a different filter or search.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== INTEGRATION ===================== -->
+<section id="install" style="padding-top: 30px;">
+  <div class="wrap">
+    <div class="section-label reveal">INTEGRATION — two lines to wrap any agent</div>
+    <p class="lead reveal">Wrap the agent in a context manager. A machine-readable trail and a human-readable report come out the <em>other side</em>.</p>
+    <div class="boxed reveal">
+      <span class="bracket tl"></span><span class="bracket tr"></span>
+      <div class="code-card">
+        <div class="code-bar">
+          <span class="code-lang">python · agent.py</span>
+          <button class="copy-btn" id="copyCode">
+            <span class="ci">⧉</span> <span class="ct">Copy</span>
+          </button>
+        </div>
+        <div class="code-body">
+<pre id="codeBlock"><span class="c-com"># wrap any agent — pause on CRITICAL, log everything else</span>
+<span class="c-kw">from</span> <span class="c-mod">glassbox</span> <span class="c-kw">import</span> <span class="c-fn">AuditSession</span>, <span class="c-fn">rules</span>, <span class="c-fn">GuardrailPolicy</span>
+
+policy = <span class="c-fn">GuardrailPolicy</span>(on_critical=<span class="c-str">"pause"</span>, approver=your_approver)
+
+<span class="c-kw">with</span> <span class="c-fn">AuditSession</span>(
+    name=<span class="c-str">"loan_decision_42"</span>,
+    rules=[rules.<span class="c-fn">PII</span>(), rules.<span class="c-fn">DTIRationale</span>(), rules.<span class="c-fn">Jurisdiction</span>(<span class="c-str">"EU"</span>)],
+    jurisdiction=<span class="c-str">"EU"</span>,
+    guardrails=policy,
+) <span class="c-kw">as</span> audit:
+    result = agent.<span class="c-fn">run</span>(application)
+
+audit.<span class="c-fn">to_json</span>(<span class="c-str">"trace.json"</span>)      <span class="c-com"># full machine-readable trail</span>
+audit.<span class="c-fn">report</span>(<span class="c-str">"compliance.pdf"</span>)   <span class="c-com"># human-readable lineage</span></pre>
+        </div>
+      </div>
+      <div class="strip">
+        <div>
+          <div class="lbl">Output</div>
+          <div class="val">JSON trail <span class="em">+</span> PDF report</div>
+        </div>
+        <div>
+          <div class="lbl">Overhead</div>
+          <div class="val"><span class="em">~0</span> lines of agent logic changed</div>
+        </div>
+        <div>
+          <div class="lbl">Guardrails</div>
+          <div class="val">pause <span class="em">·</span> raise <span class="em">·</span> log — per severity</div>
+        </div>
+        <div>
+          <div class="lbl">License</div>
+          <div class="val">Apache 2.0 <span class="em">·</span> open source</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA ===================== -->
+<section class="cta-band">
+  <div class="wrap reveal">
+    <h2>Your agent is about to make<br />the decision. Are you <span class="accent">in control?</span></h2>
+    <p>GlassBox intercepts every call, enforces every rule, and keeps the receipts — so when the regulator asks, the answer is already written, and the violation that never happened isn't in the file.</p>
+    <div class="hero-cta">
+      <a href="#install" class="btn btn-primary">pip install glassbox-fin <span>→</span></a>
+      <a href="https://github.com" target="_blank" rel="noopener" class="btn">Read the docs ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <a href="#top" class="brand"><b>glass</b>box<span class="dot">·</span>fin</a>
+    <div class="footer-links">
+      <a href="#how">How it works</a>
+      <a href="#rules">Rules</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="meta">v0.1.0-alpha · Apache 2.0</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  /* ---------- scroll reveal ---------- */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+  document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+
+  /* ---------- live audit trace: stream rows, then flash violations ---------- */
+  var termBody = document.getElementById("termBody");
+  var rows = termBody ? Array.prototype.slice.call(termBody.querySelectorAll("[data-step]")) : [];
+  var vios = Array.prototype.slice.call(document.querySelectorAll("[data-vio]"));
+
+  function runTrace() {
+    rows.forEach(function (r) { r.classList.remove("show"); });
+    vios.forEach(function (v) { v.classList.remove("show", "flash"); });
+    var d = 250;
+    rows.forEach(function (r, i) {
+      setTimeout(function () { r.classList.add("show"); }, d + i * 620);
+    });
+    var after = d + rows.length * 620 + 200;
+    vios.forEach(function (v, i) {
+      setTimeout(function () {
+        v.classList.add("show");
+        setTimeout(function () { v.classList.add("flash"); }, 60);
+      }, after + i * 480);
+    });
+  }
+
+  var traceStarted = false;
+  var traceIO = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting && !traceStarted) { traceStarted = true; runTrace(); }
+    });
+  }, { threshold: 0.3 });
+  var term = document.querySelector(".terminal-wrap");
+  if (term) traceIO.observe(term);
+
+  /* ---------- hero visuals: cursor-tracked rotation per active scene ---------- */
+  var stage = document.getElementById("cubeStage");
+  if (stage) {
+    var px = 0, py = 0;                            // normalized cursor (-1 … 1)
+    var cxRaw = 0, cyRaw = 0, hasMoved = false;    // raw cursor (px)
+    window.addEventListener("pointermove", function (e) {
+      px = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+      py = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+      cxRaw = e.clientX; cyRaw = e.clientY; hasMoved = true;
+    }, { passive: true });
+
+    var yaw = 0, spin = 42, auto = true;
+    var sx = 0, sy = 0;                            // smoothed cursor lean
+    var mp = 0, myaw = 0;                          // morph: smoothed proximity + directional yaw
+    var vRotX = -28, vRotY = -36, vVelX = 0, vVelY = 0, vDragging = false; // voxel orbit
+    var last = performance.now();
+
+    function frame(now) {
+      var dt = Math.min(0.05, (now - last) / 1000); last = now;
+      if (auto) yaw = (yaw + spin * dt) % 360;
+      sx += (px - sx) * 0.07;
+      sy += (py - sy) * 0.07;
+
+      var rotor = stage.querySelector(".viz.active .rotor");
+      if (rotor) {
+        if (rotor.classList.contains("voxel")) {
+          if (!vDragging) {
+            vRotX += vVelX; vRotY += vVelY;
+            vVelX *= 0.94; vVelY *= 0.94;          // inertia / friction
+            if (auto) vRotY += spin * 0.12 * dt;   // slight constant auto-spin (scaled by Cube spin)
+          }
+          vRotX = Math.max(-88, Math.min(88, vRotX));
+          // add cursor-direction lean on top of drag / inertia / auto-spin
+          var vLeanX = vRotX + (-sy * 12);
+          var vLeanY = vRotY + (sx * 18);
+          rotor.style.transform = "rotateX(" + vLeanX.toFixed(2) + "deg) rotateY(" + vLeanY.toFixed(2) + "deg)";
+        } else if (rotor.classList.contains("morph")) {
+          if (!hasMoved) {
+            // visible, gently turning, mostly-dark box before any interaction
+            myaw += 9 * dt;
+            rotor.style.setProperty("--p", "0.12");
+            rotor.style.transform = "rotateX(-18deg) rotateY(" + myaw.toFixed(2) + "deg)";
+          } else {
+          // proximity: closer cursor → more glass / more exploded
+          var r = stage.getBoundingClientRect();
+          var bcx = r.left + r.width / 2, bcy = r.top + r.height / 2;
+          var dx = cxRaw - bcx, dy = cyRaw - bcy;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          var tp = Math.max(0, Math.min(1, 1 - dist / 540));
+          mp += (tp - mp) * 0.08;
+          rotor.style.setProperty("--p", (0.12 + mp * 0.88).toFixed(3));
+          // idle drift + cursor-side steering (left = anticlockwise, right = clockwise)
+          var hdx = Math.max(-1, Math.min(1, dx / (r.width * 0.9)));
+          myaw += (9 + hdx * spin) * dt;
+          rotor.style.transform =
+            "rotateX(" + (-18 + -sy * 16).toFixed(2) + "deg) " +
+            "rotateY(" + myaw.toFixed(2) + "deg)";
+          }
+        } else {
+          var bx = parseFloat(rotor.dataset.basex || "0");
+          var by = parseFloat(rotor.dataset.basey || "0");
+          if (rotor.dataset.mode === "spin") {
+            rotor.style.transform =
+              "rotateX(" + (bx + -sy * 22).toFixed(2) + "deg) " +
+              "rotateY(" + (yaw + sx * 34).toFixed(2) + "deg)";
+          } else {
+            var sway = Math.sin(now / 2400) * 4;
+            rotor.style.transform =
+              "rotateX(" + (bx + -sy * 16).toFixed(2) + "deg) " +
+              "rotateY(" + (by + sway + sx * 26).toFixed(2) + "deg)";
+          }
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    /* ---- build & wire the cube-of-cubes scene ---- */
+    var voxel = document.getElementById("voxel");
+    var voxelTip = document.getElementById("voxelTip");
+    if (voxel) {
+      var LABELS = [
+        "llm.call · plan", "retrieve_docs", "format_prompt", "get_credit_score",
+        "tool.parse", "validate_input", "policy.lookup", "rank_options",
+        "compose_reply", "log.write", "score.normalize", "fetch_market",
+        "risk.assess", "tool.call", "summarize", "cache.read",
+        "embed_query", "guardrail.check", "rate_limit", "audit.tag",
+        "redact_scan", "context.build", "tool.result", "finalize"
+      ];
+      // coords that carry the two real violations
+      var flagged = { "1,-1,1": "send_email · PII · BSN leaked ⚠", "0,1,-1": "decision · DTI rationale missing ⚠" };
+      var li = 0;
+      var cells = [];
+      for (var x = -1; x <= 1; x++) {
+        for (var y = -1; y <= 1; y++) {
+          for (var z = -1; z <= 1; z++) {
+            var cell = document.createElement("div");
+            cell.className = "cell";
+            cell.style.setProperty("--x", x);
+            cell.style.setProperty("--y", y);
+            cell.style.setProperty("--z", z);
+            // spatial intensity gradient + distance from core (for the ripple)
+            var inten = ((x + 1) * 9 + (y + 1) * 3 + (z + 1)) / 26;
+            var dist = Math.sqrt(x * x + y * y + z * z);
+            cell.style.setProperty("--i", inten.toFixed(3));
+            cell.style.setProperty("--d", dist.toFixed(3));
+            var key = x + "," + y + "," + z;
+            if (flagged[key]) {
+              cell.classList.add("flag");
+              cell.dataset.label = flagged[key];
+              cell.dataset.flag = "1";
+            } else if (x === 0 && y === 0 && z === 0) {
+              cell.classList.add("hot");
+              cell.dataset.label = "decision · core";
+            } else {
+              cell.classList.add("rip");
+              cell.dataset.label = LABELS[li % LABELS.length]; li++;
+            }
+            cell.innerHTML =
+              '<div class="cf f"></div><div class="cf bk"></div><div class="cf r"></div>' +
+              '<div class="cf l"></div><div class="cf u"></div><div class="cf d"></div>';
+            voxel.appendChild(cell);
+            cells.push({ el: cell, x: x, y: y, z: z });
+          }
+        }
+      }
+
+      var vExploded = false;
+      function applyExplode() {
+        var sp = vExploded ? 128 : 66;
+        cells.forEach(function (c) {
+          c.el.style.transform = "translate3d(" + (c.x * sp) + "px," + (c.y * sp) + "px," + (c.z * sp) + "px)";
+        });
+      }
+
+      var vViz = stage.querySelector(".viz-voxel");
+      var downX = 0, downY = 0, lastX = 0, lastY = 0, moved = false;
+      function hideTip() { voxelTip.classList.remove("show"); }
+
+      stage.addEventListener("pointerdown", function (e) {
+        if (!vViz.classList.contains("active")) return;
+        vDragging = true; moved = false;
+        downX = lastX = e.clientX; downY = lastY = e.clientY;
+        vVelX = vVelY = 0;
+        vViz.classList.add("dragging");
+        hideTip();
+      });
+      window.addEventListener("pointermove", function (e) {
+        if (!vDragging) return;
+        var dx = e.clientX - lastX, dy = e.clientY - lastY;
+        lastX = e.clientX; lastY = e.clientY;
+        if (Math.abs(e.clientX - downX) + Math.abs(e.clientY - downY) > 4) moved = true;
+        vRotY += dx * 0.5;
+        vRotX -= dy * 0.5;
+        vVelY = dx * 0.5;
+        vVelX = -dy * 0.5;
+      });
+      window.addEventListener("pointerup", function () {
+        if (!vDragging) return;
+        vDragging = false;
+        vViz.classList.remove("dragging");
+        if (!moved) { vExploded = !vExploded; applyExplode(); }   // a click (not a drag) explodes/reassembles
+      });
+
+      // hover tooltip (only when not dragging)
+      stage.addEventListener("pointermove", function (e) {
+        if (!vViz.classList.contains("active") || vDragging) { hideTip(); return; }
+        var cell = e.target.closest && e.target.closest(".cell");
+        if (cell) {
+          var r = stage.getBoundingClientRect();
+          voxelTip.textContent = cell.dataset.label;
+          voxelTip.classList.toggle("flag", cell.dataset.flag === "1");
+          voxelTip.style.left = (e.clientX - r.left) + "px";
+          voxelTip.style.top = (e.clientY - r.top) + "px";
+          voxelTip.classList.add("show");
+        } else {
+          hideTip();
+        }
+      });
+      stage.addEventListener("pointerleave", hideTip);
+    }
+
+    window.GlassBoxCube = {
+      setSpin: function (v) { spin = v; },
+      setAuto: function (b) { auto = !!b; },
+      setViz: function (name) {
+        var layers = stage.querySelectorAll(".viz");
+        Array.prototype.forEach.call(layers, function (el) {
+          el.classList.toggle("active", el.getAttribute("data-viz") === name);
+        });
+      }
+    };
+  }
+
+  /* ---------- copy buttons ---------- */
+  function wireCopy(btn, text, labelEl) {
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      navigator.clipboard && navigator.clipboard.writeText(text).then(function () {
+        btn.classList.add("copied");
+        var prev = labelEl ? labelEl.textContent : null;
+        if (labelEl) labelEl.textContent = "Copied";
+        setTimeout(function () {
+          btn.classList.remove("copied");
+          if (labelEl) labelEl.textContent = prev;
+        }, 1600);
+      });
+    });
+  }
+
+  var codeBtn = document.getElementById("copyCode");
+  var codeText = document.getElementById("codeBlock");
+  wireCopy(codeBtn, codeText ? codeText.innerText : "", codeBtn ? codeBtn.querySelector(".ct") : null);
+
+  var heroBtn = document.getElementById("hero-copy");
+  if (heroBtn) {
+    heroBtn.addEventListener("click", function () {
+      navigator.clipboard && navigator.clipboard.writeText("pip install glassbox-fin");
+      var orig = heroBtn.innerHTML;
+      heroBtn.innerHTML = "<span class='dollar'>✓</span> Copied to clipboard";
+      setTimeout(function () { heroBtn.innerHTML = orig; }, 1600);
+    });
+  }
+
+  /* ---------- how-it-works: pipeline stepper + demos ---------- */
+  var pipe = document.getElementById("pipeline");
+  if (pipe) {
+    var steps = Array.prototype.slice.call(pipe.querySelectorAll(".card.step"));
+    var panes = Array.prototype.slice.call(document.querySelectorAll(".demo-pane"));
+    var demoTitle = document.getElementById("demoTitle");
+    var TITLES = [
+      "<b>interception</b> · any framework, one wrapper",
+      "<b>enforcement</b> · guardrails fire at the call boundary",
+      "<b>rule engine</b> · toggle checks, watch what's caught",
+      "<b>lineage</b> · raw trace becomes a readable record"
+    ];
+    var hidx = 0, htimer = null, HAUTO = 5200;
+
+    function hGo(i) {
+      hidx = i;
+      steps.forEach(function (s, k) { s.classList.toggle("active", k === i); });
+      panes.forEach(function (p, k) { p.classList.toggle("active", k === i); });
+      if (demoTitle) demoTitle.innerHTML = TITLES[i];
+    }
+    function hNext() { hGo((hidx + 1) % steps.length); }
+    function hStart() { hStop(); htimer = setInterval(hNext, HAUTO); }
+    function hStop() { if (htimer) { clearInterval(htimer); htimer = null; } }
+
+    steps.forEach(function (s, k) {
+      s.addEventListener("click", function () { hGo(k); hStart(); });
+      s.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); hGo(k); hStart(); }
+      });
+    });
+    var howSection = document.getElementById("how");
+    if (howSection) {
+      howSection.addEventListener("mouseenter", hStop);
+      howSection.addEventListener("mouseleave", hStart);
+    }
+    var hStarted = false;
+    var hIO = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting && !hStarted) { hStarted = true; hStart(); } });
+    }, { threshold: 0.25 });
+    hIO.observe(pipe);
+    hGo(0);
+
+    /* ENFORCE · per-severity guardrail policy at the call boundary */
+    Array.prototype.forEach.call(document.querySelectorAll(".enforce-grid .seg.sm"), function (seg) {
+      Array.prototype.forEach.call(seg.querySelectorAll(".seg-opt"), function (opt) {
+        opt.addEventListener("click", function () {
+          Array.prototype.forEach.call(seg.querySelectorAll(".seg-opt"), function (o) { o.classList.remove("active"); });
+          opt.classList.add("active");
+        });
+      });
+    });
+    var enfRun = document.getElementById("enfRun");
+    var enfResult = document.getElementById("enfResult");
+    function critPolicy() {
+      var a = document.querySelector('.seg.sm[data-pol="critical"] .seg-opt.active');
+      return a ? a.dataset.act : "pause";
+    }
+    function enfSet(cls, html) { enfResult.className = "bnd-result show " + cls; enfResult.innerHTML = html; }
+    if (enfRun && enfResult) {
+      enfRun.addEventListener("click", function () {
+        var p = critPolicy();
+        if (p === "block") {
+          enfSet("block", "\u26d4 <b>Blocked at the boundary.</b> send_email never executed \u2014 recorded as PII_IN_TOOL_ARGS.");
+        } else if (p === "log") {
+          enfSet("log", "\u26a0 <b>Logged &amp; continued.</b> The call ran; the violation is flagged in the trail for review.");
+        } else {
+          enfSet("pause", "\u23f8 <b>Paused \u2014 awaiting approver.</b> The tool is held at the boundary.<div class=\"appr\"><button class=\"yes\">Approve</button><button class=\"no\">Deny</button></div>");
+          var yes = enfResult.querySelector(".yes"), no = enfResult.querySelector(".no");
+          if (yes) yes.addEventListener("click", function () { enfSet("ok", "\u2713 <b>Approved.</b> Executed with sign-off recorded against loan_decision_42."); });
+          if (no) no.addEventListener("click", function () { enfSet("block", "\u26d4 <b>Denied.</b> Call blocked by the approver \u2014 the violation never happened."); });
+        }
+      });
+    }
+
+    /* nav \u201cGuardrails\u201d jumps to the enforce step */
+    var gnav = document.querySelector('a[href="#guardrails"]');
+    if (gnav) gnav.addEventListener("click", function () { hGo(1); hStart(); });
+
+    /* INTERCEPT · framework switcher */
+    var FW = {
+      langchain: "audit.wrap(agent_executor)",
+      llamaindex: "audit.wrap(query_engine)",
+      raw: "with audit.trace():\n    client.chat(messages)"
+    };
+    var fwCode = document.getElementById("fwCode");
+    Array.prototype.forEach.call(document.querySelectorAll("#fwSeg .seg-opt"), function (opt) {
+      opt.addEventListener("click", function () {
+        Array.prototype.forEach.call(document.querySelectorAll("#fwSeg .seg-opt"), function (o) { o.classList.remove("active"); });
+        opt.classList.add("active");
+        if (fwCode) fwCode.textContent = FW[opt.dataset.fw];
+      });
+    });
+
+    /* CHECK · rule toggles re-score the sample trace */
+    var RULE_HITS = { pii: "s2", dti: "s4", jur: "s1", thr: "s3" };
+    var RULE_NAME = { pii: "PII", dti: "DTI", jur: "JURISDICTION", thr: "THRESHOLD" };
+    var togs = Array.prototype.slice.call(document.querySelectorAll("#checkTogs .tog"));
+    var vCount = document.getElementById("vCount");
+    var vClause = document.getElementById("vClause");
+    function recheck() {
+      var flagged = {};
+      togs.forEach(function (t) {
+        if (t.classList.contains("on")) flagged[RULE_HITS[t.dataset.rule]] = RULE_NAME[t.dataset.rule];
+      });
+      var count = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("#checkTrace .vrow"), function (row) {
+        var hit = flagged[row.dataset.s];
+        var vs = row.querySelector(".vs");
+        if (hit) { row.classList.add("bad"); vs.className = "vs fail"; vs.textContent = "✗ " + hit; count++; }
+        else { row.classList.remove("bad"); vs.className = "vs pass"; vs.textContent = "✓ clean"; }
+      });
+      if (vCount) vCount.textContent = count;
+      if (vClause) vClause.textContent = count === 1 ? "violation caught" : "violations caught";
+    }
+    togs.forEach(function (t) {
+      function flip() {
+        t.classList.toggle("on");
+        t.setAttribute("aria-checked", t.classList.contains("on") ? "true" : "false");
+        recheck();
+      }
+      t.addEventListener("click", flip);
+      t.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); } });
+    });
+    recheck();
+
+    /* EXPLAIN · raw ⇄ narrative + export */
+    var exRaw = document.getElementById("exRaw");
+    var exNarr = document.getElementById("exNarr");
+    Array.prototype.forEach.call(document.querySelectorAll("#exSeg .seg-opt"), function (opt) {
+      opt.addEventListener("click", function () {
+        Array.prototype.forEach.call(document.querySelectorAll("#exSeg .seg-opt"), function (o) { o.classList.remove("active"); });
+        opt.classList.add("active");
+        var narr = opt.dataset.view === "narr";
+        if (exRaw) exRaw.style.display = narr ? "none" : "block";
+        if (exNarr) exNarr.style.display = narr ? "block" : "none";
+      });
+    });
+    var pdfBtn = document.getElementById("pdfBtn");
+    if (pdfBtn) {
+      var pt = pdfBtn.querySelector(".pt");
+      pdfBtn.addEventListener("click", function () {
+        if (pdfBtn.classList.contains("gen")) return;
+        pdfBtn.classList.add("gen");
+        var orig = pt.textContent;
+        pt.textContent = "generating…";
+        setTimeout(function () {
+          pt.textContent = "compliance.pdf ✓";
+          setTimeout(function () { pt.textContent = orig; pdfBtn.classList.remove("gen"); }, 1500);
+        }, 850);
+      });
+    }
+  }
+
+  /* ---------- rules: filter · search · expand ---------- */
+  var rulesGrid = document.getElementById("rulesGrid");
+  if (rulesGrid) {
+    var ruleRows = Array.prototype.slice.call(rulesGrid.querySelectorAll(".rule-row"));
+    var sevFilters = Array.prototype.slice.call(document.querySelectorAll("#sevFilters .filter-pill"));
+    var ruleSearch = document.getElementById("ruleSearch");
+    var ruleCount = document.getElementById("ruleCount");
+    var rulesEmpty = document.getElementById("rulesEmpty");
+    var curSev = "all";
+
+    function applyRules() {
+      var q = (ruleSearch && ruleSearch.value || "").trim().toLowerCase();
+      var shown = 0;
+      ruleRows.forEach(function (row) {
+        var okSev = curSev === "all" || row.dataset.sev === curSev;
+        var okQ = !q || row.dataset.name.toLowerCase().indexOf(q) !== -1;
+        var show = okSev && okQ;
+        row.classList.toggle("hidden", !show);
+        if (!show) row.classList.remove("open");
+        if (show) shown++;
+      });
+      if (ruleCount) ruleCount.innerHTML = "<b>" + shown + "</b> of " + ruleRows.length + " rules";
+      if (rulesEmpty) rulesEmpty.classList.toggle("show", shown === 0);
+    }
+
+    ruleRows.forEach(function (row) {
+      row.addEventListener("click", function (e) {
+        if (e.target.closest(".rule-detail")) return;
+        row.classList.toggle("open");
+      });
+    });
+    sevFilters.forEach(function (pill) {
+      pill.addEventListener("click", function () {
+        sevFilters.forEach(function (p) { p.classList.remove("active"); });
+        pill.classList.add("active");
+        curSev = pill.dataset.sev;
+        applyRules();
+      });
+    });
+    if (ruleSearch) ruleSearch.addEventListener("input", applyRules);
+    applyRules();
+  }
+})();
+</script>
+
+</body>
+</html>
