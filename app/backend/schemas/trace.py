@@ -48,6 +48,22 @@ class TraceListItem(ORMModel):
     outcome: str  # running | completed | halted
 
 
+class ViolationListItem(ORMModel):
+    id: str
+    violation_id: str
+    rule_id: str
+    severity: str
+    message: str
+    regulatory_reference: Optional[str]
+    remediation: Optional[str]
+    detected_at: str
+    resolution: Optional[str]
+    agent_id: str
+    agent_name: Optional[str]
+    trace_id: Optional[str]
+    created_at: datetime
+
+
 class TraceDetailResponse(ORMModel):
     id: str
     trace_id: str

@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.backend.config import settings
 from app.backend.db import create_all_tables
 from app.backend.routers import (
-    auth, orgs, workspaces, fleets, agents, ingest, holds, vendors, rulesets, traces, stats
+    auth, orgs, workspaces, fleets, agents, ingest, holds, vendors, rulesets, traces, stats, violations
 )
 
 
@@ -37,6 +37,7 @@ app.include_router(vendors.router)
 app.include_router(rulesets.router)
 app.include_router(traces.router)
 app.include_router(stats.router)
+app.include_router(violations.router)
 
 
 @app.get("/api/health")
