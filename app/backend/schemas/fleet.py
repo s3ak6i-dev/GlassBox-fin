@@ -2,6 +2,8 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 
+from app.backend.schemas.base import ORMModel
+
 
 class FleetCreate(BaseModel):
     name: str
@@ -15,15 +17,13 @@ class FleetUpdate(BaseModel):
     ruleset_id: Optional[str] = None
 
 
-class FleetResponse(BaseModel):
+class FleetResponse(ORMModel):
     id: str
     workspace_id: str
     name: str
     description: str
     ruleset_id: Optional[str]
     created_at: datetime
-
-    model_config = {"from_attributes": True}
 
 
 class AgentCreate(BaseModel):
@@ -38,7 +38,7 @@ class AgentUpdate(BaseModel):
     fleet_id: Optional[str] = None
 
 
-class AgentResponse(BaseModel):
+class AgentResponse(ORMModel):
     id: str
     workspace_id: str
     fleet_id: Optional[str]
@@ -47,5 +47,3 @@ class AgentResponse(BaseModel):
     instrumentation_key: str
     created_at: datetime
     last_seen_at: Optional[datetime]
-
-    model_config = {"from_attributes": True}
