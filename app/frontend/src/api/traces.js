@@ -1,23 +1,15 @@
 import { apiFetch } from './client.js'
 
 export const tracesApi = {
-  list: (token, params = {}) => {
-    const q = new URLSearchParams(params).toString()
-    return apiFetch(`/traces${q ? '?' + q : ''}`, { token })
+  list: (token, workspaceId, params = {}) => {
+    const q = new URLSearchParams({ workspace_id: workspaceId, ...params }).toString()
+    return apiFetch(`/traces?${q}`, { token })
   },
-  get:   (token, id) => apiFetch(`/traces/${id}`, { token }),
-  steps: (token, id) => apiFetch(`/traces/${id}/steps`, { token }),
+  get:   (token, traceId) => apiFetch(`/traces/${traceId}`, { token }),
+  steps: (token, traceId) => apiFetch(`/traces/${traceId}/steps`, { token }),
 }
 
-export const violationsApi = {
-  list: (token, params = {}) => {
-    const q = new URLSearchParams(params).toString()
-    return apiFetch(`/violations${q ? '?' + q : ''}`, { token })
-  },
-}
-
-export const spendApi = {
-  summary:  (token, params = {}) => apiFetch(`/spend/summary?${new URLSearchParams(params)}`, { token }),
-  byAgent:  (token, params = {}) => apiFetch(`/spend/by-agent?${new URLSearchParams(params)}`, { token }),
-  byVendor: (token, params = {}) => apiFetch(`/spend/by-vendor?${new URLSearchParams(params)}`, { token }),
+export const statsApi = {
+  overview: (token, workspaceId) => apiFetch(`/stats/overview?workspace_id=${workspaceId}`, { token }),
+  agents:   (token, workspaceId) => apiFetch(`/stats/agents?workspace_id=${workspaceId}`, { token }),
 }

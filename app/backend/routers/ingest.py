@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.backend.db import get_db
+from app.backend.events import bus
 from app.backend.models.fleet import Agent
 from app.backend.models.spend import SpendRecord
 from app.backend.models.trace import StoredStep, StoredTrace
@@ -87,6 +88,13 @@ async def trace_start(
     )
     db.add(trace)
     await db.commit()
+    bus.publish(str(agent.workspace_id), {
+        "type": "trace_start",
+        "trace_id": body.trace_id,
+        "agent_id": str(agent.id),
+        "agent_name": agent.name,
+        "task_description": body.task_description,
+    })
     return {"ok": True, "trace_id": body.trace_id}
 
 
@@ -157,6 +165,7 @@ async def trace_end(
     trace.halt_reason = body.halt_reason
     trace.step_count = body.step_count
     trace.metadata_ = body.metadata
+    crit = sum(1 for v in body.violations if v.severity == "CRITICAL")
 
     # Create violations (skip ones already created via hold endpoint)
     for v in body.violations:
@@ -189,6 +198,17 @@ async def trace_end(
         db.add(sv)
 
     await db.commit()
+    bus.publish(str(agent.workspace_id), {
+        "type": "trace_end",
+        "trace_id": trace_id,
+        "agent_id": str(agent.id),
+        "agent_name": agent.name,
+        "step_count": body.step_count,
+        "violation_count": len(body.violations),
+        "critical_count": crit,
+        "halted": body.halted,
+        "outcome": "halted" if body.halted else "completed",
+    })
     return {"ok": True, "trace_id": trace_id}
 
 
@@ -249,6 +269,15 @@ async def create_hold(
     await db.commit()
     await db.refresh(hold)
 
+    bus.publish(str(agent.workspace_id), {
+        "type": "hold_created",
+        "hold_id": str(hold.id),
+        "agent_id": str(agent.id),
+        "agent_name": agent.name,
+        "rule_id": v.rule_id,
+        "severity": v.severity,
+        "message": v.message,
+    })
     return {"hold_id": str(hold.id)}
 
 
