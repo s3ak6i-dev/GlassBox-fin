@@ -1,0 +1,58 @@
+:root {
+  /* base */
+  --bg:        #06080d;
+  --bg-2:      #090c13;
+  --panel:     #0b0f17;
+  --line:      rgba(255, 255, 255, 0.07);
+  --line-2:    rgba(255, 255, 255, 0.12);
+
+  /* text */
+  --ink:       #e9edf6;
+  --ink-2:     #aab3c5;
+  --ink-3:     #6b7488;
+  --ink-faint: #424b5e;
+
+  /* accent duo — amber→coral */
+  --blue:      #ffb454;
+  --cyan:      #ff6f5e;
+  --blue-rgb:  255, 180, 84;
+  --cyan-rgb:  255, 111, 94;
+  --edge-rgb:  255, 160, 120;
+  --blue-soft: rgba(var(--blue-rgb), 0.16);
+  --cyan-soft: rgba(var(--cyan-rgb), 0.16);
+  --grad:      linear-gradient(115deg, var(--blue), var(--cyan));
+
+  /* glass */
+  --glass:      rgba(255, 255, 255, 0.035);
+  --glass-2:    rgba(255, 255, 255, 0.055);
+  --glass-edge: rgba(255, 255, 255, 0.14);
+  --glass-blur: saturate(1.3) blur(21px);
+
+  /* severity */
+  --critical: #ff5d6c;
+  --high:     #ffb454;
+  --medium:   #36c79a;
+  --pass:     #3fd99a;
+  --warn:     #ffc24d;
+  --fail:     #ff5d6c;
+
+  /* layout */
+  --sidebar-w: 240px;
+  --topbar-h:  56px;
+  --r:         12px;
+  --r-sm:      8px;
+
+  /* type */
+  --font-display: "Space Grotesk", sans-serif;
+  --font-serif:   "Instrument Serif", Georgia, serif;
+  --font-prose:   "Newsreader", Georgia, serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  --fs-xl:    clamp(28px, 3.5vw, 42px);
+  --fs-h2:    22px;
+  --fs-h3:    18px;
+  --fs-lead:  16px;
+  --fs-ui:    13.5px;
+  --fs-label: 11.5px;
+  --fs-xs:    10.5px;
+}

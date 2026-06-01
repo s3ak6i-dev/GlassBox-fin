@@ -1,0 +1,45 @@
+.topbar {
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(6, 8, 13, 0.7);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  flex-shrink: 0;
+}
+
+.left { display: flex; align-items: center; gap: 16px; }
+.title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.right { display: flex; align-items: center; gap: 12px; }
+
+.user { display: flex; align-items: center; gap: 9px; }
+
+.avatar {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: #04121a;
+  flex-shrink: 0;
+}
+
+.email {
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
