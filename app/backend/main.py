@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.backend.config import settings
 from app.backend.db import create_all_tables
-from app.backend.routers import auth, orgs, workspaces, fleets, agents
+from app.backend.routers import auth, orgs, workspaces, fleets, agents, ingest, holds
 
 
 @asynccontextmanager
@@ -29,6 +29,8 @@ app.include_router(orgs.router)
 app.include_router(workspaces.router)
 app.include_router(fleets.router)
 app.include_router(agents.router)
+app.include_router(ingest.router)
+app.include_router(holds.router)
 
 
 @app.get("/api/health")

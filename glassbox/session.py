@@ -29,6 +29,8 @@ class AuditSession:
         export: Optional[str] = None,
         redact_pii: bool = True,
         metadata: Optional[dict] = None,
+        instrumentation_key: Optional[str] = None,
+        api_url: str = "http://localhost:8000",
     ) -> None:
         from glassbox.rules import DEFAULT_RULES
 
@@ -40,12 +42,15 @@ class AuditSession:
         self._export = export
         self._redact_pii = redact_pii
         self._metadata = metadata or {}
+        self._instrumentation_key = instrumentation_key
+        self._api_url = api_url
 
         self._trace: Optional[AgentTrace] = None
         self._collector: Optional[TraceCollector] = None
         self._engine: Optional[GuardrailEngine] = None
         self._active_adapters: list = []
         self._post_session_violations: list[Violation] = []
+        self._ingest: Optional[object] = None
 
     def __enter__(self) -> "AuditSession":
         self._trace = AgentTrace(
@@ -56,10 +61,27 @@ class AuditSession:
             metadata=dict(self._metadata),
         )
 
+        # Set up platform ingest client if key is provided
+        step_callback = None
+        if self._instrumentation_key:
+            from glassbox._ingest import IngestClient
+            self._ingest = IngestClient(self._instrumentation_key, self._api_url)
+            self._ingest.start_trace(self._trace)  # type: ignore[union-attr]
+            _trace_id = self._trace.trace_id
+            _client = self._ingest
+            step_callback = lambda step: _client.send_step(_trace_id, step)  # noqa: E731
+
+            # Inject remote approver if policy has pause but no approver
+            if self._policy and self._policy.on_critical == "pause" and self._policy.approver is None:
+                _tid = self._trace.trace_id
+                def _remote_approver(violation) -> bool:
+                    return _client.create_hold_and_wait(_tid, violation)  # type: ignore[union-attr]
+                self._policy.approver = _remote_approver
+
         self._engine = (
             GuardrailEngine(self._rules, self._policy) if self._policy else None
         )
-        self._collector = TraceCollector(self._trace, self._engine)
+        self._collector = TraceCollector(self._trace, self._engine, step_callback=step_callback)
 
         if self._explicit_adapter is not None:
             adapter = self._explicit_adapter(self._collector)
@@ -127,6 +149,13 @@ class AuditSession:
         if self._export:
             try:
                 self.to_json(self._export)
+            except Exception:
+                pass
+
+        # Stream final state to platform
+        if self._ingest:
+            try:
+                self._ingest.end_trace(self._trace, self.violations)  # type: ignore[union-attr]
             except Exception:
                 pass
 

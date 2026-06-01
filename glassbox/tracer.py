@@ -12,10 +12,16 @@ if TYPE_CHECKING:
 
 
 class TraceCollector:
-    def __init__(self, trace: AgentTrace, engine: Optional["GuardrailEngine"] = None) -> None:
+    def __init__(
+        self,
+        trace: AgentTrace,
+        engine: Optional["GuardrailEngine"] = None,
+        step_callback=None,
+    ) -> None:
         self._trace = trace
         self._engine = engine
         self._lock = threading.Lock()
+        self._step_callback = step_callback  # called after each completed step
 
     def begin_step(
         self,
@@ -42,6 +48,11 @@ class TraceCollector:
         step.step_hash = step.compute_hash()
         with self._lock:
             self._trace.steps.append(step)
+        if self._step_callback:
+            try:
+                self._step_callback(step)
+            except Exception:
+                pass
         if self._engine:
             self._engine.evaluate(step, self._trace, Trigger.POST_CALL)
 
