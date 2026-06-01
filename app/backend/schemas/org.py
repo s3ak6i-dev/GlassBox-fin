@@ -10,7 +10,15 @@ class OrgResponse(ORMModel):
     slug: str
     industry: str
     jurisdiction: str
+    onboarded: bool
     created_at: datetime
+
+
+class OrgUpdate(BaseModel):
+    name: str | None = None
+    industry: str | None = None
+    jurisdiction: str | None = None
+    onboarded: bool | None = None
 
 
 class WorkspaceCreate(BaseModel):

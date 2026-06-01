@@ -6,7 +6,7 @@ from app.backend.auth import get_current_user, hash_password
 from app.backend.db import get_db
 from app.backend.models.org import Organization, User
 from app.backend.schemas.auth import UserResponse
-from app.backend.schemas.org import InviteRequest, OrgResponse
+from app.backend.schemas.org import InviteRequest, OrgResponse, OrgUpdate
 
 router = APIRouter(prefix="/api/org", tags=["org"])
 
@@ -17,6 +17,29 @@ async def get_org(user: User = Depends(get_current_user), db: AsyncSession = Dep
     org = result.scalar_one_or_none()
     if not org:
         raise HTTPException(status_code=404, detail="Organization not found")
+    return org
+
+
+@router.put("", response_model=OrgResponse)
+async def update_org(
+    body: OrgUpdate,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(Organization).where(Organization.id == user.org_id))
+    org = result.scalar_one_or_none()
+    if not org:
+        raise HTTPException(status_code=404, detail="Organization not found")
+    if body.name is not None:
+        org.name = body.name
+    if body.industry is not None:
+        org.industry = body.industry
+    if body.jurisdiction is not None:
+        org.jurisdiction = body.jurisdiction
+    if body.onboarded is not None:
+        org.onboarded = body.onboarded
+    await db.commit()
+    await db.refresh(org)
     return org
 
 
