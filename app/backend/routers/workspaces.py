@@ -12,7 +12,9 @@ router = APIRouter(prefix="/api/workspaces", tags=["workspaces"])
 
 @router.get("", response_model=list[WorkspaceResponse])
 async def list_workspaces(user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Workspace).where(Workspace.org_id == user.org_id))
+    result = await db.execute(
+        select(Workspace).where(Workspace.org_id == user.org_id).order_by(Workspace.created_at)
+    )
     return result.scalars().all()
 
 
