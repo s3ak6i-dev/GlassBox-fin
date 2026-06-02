@@ -4,6 +4,7 @@ import { authApi } from '../../api/auth.js'
 import { useAuth } from '../../hooks/useAuth.js'
 import Button from '../../components/ui/Button.jsx'
 import Input from '../../components/ui/Input.jsx'
+import GoogleButton from '../../components/auth/GoogleButton.jsx'
 import styles from './Auth.module.css'
 
 const JURISDICTIONS = ['EU', 'UK', 'US']
@@ -75,6 +76,9 @@ export default function Signup() {
             {loading ? 'Creating account…' : 'Create account →'}
           </Button>
         </form>
+
+        <div className={styles.divider}>or</div>
+        <GoogleButton />
 
         <p className={styles.footer}>
           Already have an account? <Link to="/login" style={{ color: 'var(--cyan)' }}>Sign in</Link>

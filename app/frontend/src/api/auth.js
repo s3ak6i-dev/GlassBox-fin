@@ -7,6 +7,13 @@ export const authApi = {
   login: (email, password) =>
     apiFetch('/auth/login', { method: 'POST', body: { email, password } }),
 
+  google: (credential) =>
+    apiFetch('/auth/google', { method: 'POST', body: { credential } }),
+
   me: (token) =>
     apiFetch('/auth/me', { token }),
+}
+
+export const configApi = {
+  get: () => apiFetch('/config'),
 }

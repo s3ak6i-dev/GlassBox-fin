@@ -53,6 +53,12 @@ async def health():
     return {"status": "ok", "version": "0.1.0"}
 
 
+@app.get("/api/config")
+async def public_config():
+    # Public, safe-to-expose front-end config (Client ID is not a secret).
+    return {"google_client_id": settings.google_client_id}
+
+
 # ── Serve the built frontend (single-origin production) ──────────────────────
 # When app/frontend/dist exists, this same service serves the SPA. API routes
 # above always win; everything else falls back to index.html for client routing.

@@ -4,6 +4,7 @@ import { authApi } from '../../api/auth.js'
 import { useAuth } from '../../hooks/useAuth.js'
 import Button from '../../components/ui/Button.jsx'
 import Input from '../../components/ui/Input.jsx'
+import GoogleButton from '../../components/auth/GoogleButton.jsx'
 import styles from './Auth.module.css'
 
 export default function Login() {
@@ -70,6 +71,9 @@ export default function Login() {
             {loading ? 'Signing in…' : 'Sign in →'}
           </Button>
         </form>
+
+        <div className={styles.divider}>or</div>
+        <GoogleButton />
 
         <p className={styles.footer}>
           No account? <Link to="/signup" style={{ color: 'var(--cyan)' }}>Create one</Link>
