@@ -46,6 +46,13 @@ with AuditSession(instrumentation_key="gbx_live_...", ...) as audit:
 
 Traces stream to your dashboard live, and `pause` holds are resolved from the Hold Inbox.
 
+### 📑 Connecting agents
+
+**[docs/CONNECTING.md](docs/CONNECTING.md)** is the complete guide — every way to
+wire an agent in, from the app and from the library, for each framework
+(OpenAI · Anthropic · Groq · Ollama · LangChain · LangGraph · LlamaIndex) plus
+multi-agent topologies. Runnable [examples](examples/) included.
+
 ---
 
 ## The platform (`app/`)

@@ -116,11 +116,30 @@ export default function FleetGraph({ data, width, height, onSelect, selectedId }
   return (
     <div style={{ position: 'relative', width, height, overflow: 'hidden' }}>
       <svg ref={svgRef} width={width} height={height} style={{ display: 'block', cursor: 'grab' }}>
+        <defs>
+          <marker id="gb-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L8,4 L0,8 z" fill="rgba(170,179,197,0.7)" />
+          </marker>
+        </defs>
         <g transform={`translate(${tf.x},${tf.y}) scale(${tf.k})`}>
           {/* edges */}
           {links.map((l, i) => {
             const lit = hover && (l.source.id === hover || l.target.id === hover)
             const op = hover ? (lit ? 0.9 : 0.08) : 0.5
+            const isChain = l.kind === 'agent'
+            if (isChain) {
+              return (
+                <line
+                  key={i}
+                  x1={l.source.x} y1={l.source.y} x2={l.target.x} y2={l.target.y}
+                  stroke={l.has_violation ? 'var(--critical)' : 'rgba(170,179,197,0.6)'}
+                  strokeWidth={1.5}
+                  strokeDasharray="2 5"
+                  markerEnd="url(#gb-arrow)"
+                  style={{ opacity: op }}
+                />
+              )
+            }
             return (
               <line
                 key={i}

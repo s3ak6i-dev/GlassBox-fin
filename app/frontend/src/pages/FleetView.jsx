@@ -124,6 +124,7 @@ function Legend() {
     { c: '#ffb454', t: 'warning' },
     { c: '#ff5d6c', t: 'critical / hold' },
     { c: 'var(--ink-2)', t: '⬡ vendor', hex: true },
+    { c: 'var(--ink-2)', t: '⇢ delegation', hex: true },
   ]
   return (
     <div style={{

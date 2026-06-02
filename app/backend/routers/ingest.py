@@ -281,6 +281,43 @@ async def create_hold(
     return {"hold_id": str(hold.id)}
 
 
+# ── POST /api/ingest/subagent ────────────────────────────────────────────────
+# A parent agent registers (or reuses) a child agent and records the call edge.
+
+@router.post("/subagent", status_code=201)
+async def spawn_subagent(
+    body: dict,
+    x_glassbox_key: str = Header(..., alias="X-Glassbox-Key"),
+    db: AsyncSession = Depends(get_db),
+):
+    parent = await _get_agent(x_glassbox_key, db)
+    name = body.get("name")
+    if not name:
+        raise HTTPException(status_code=422, detail="name required")
+
+    # reuse an existing child of this parent with the same name, else create
+    existing = await db.execute(
+        select(Agent).where(
+            Agent.workspace_id == parent.workspace_id,
+            Agent.name == name,
+            Agent.parent_agent_id == parent.id,
+        )
+    )
+    child = existing.scalar_one_or_none()
+    if not child:
+        child = Agent(
+            workspace_id=parent.workspace_id,
+            fleet_id=parent.fleet_id,
+            name=name,
+            description=f"Sub-agent of {parent.name}",
+            parent_agent_id=parent.id,
+        )
+        db.add(child)
+    await db.commit()
+    await db.refresh(child)
+    return {"instrumentation_key": str(child.instrumentation_key), "agent_id": str(child.id)}
+
+
 # ── GET /api/ingest/hold/{hold_id} ───────────────────────────────────────────
 
 @router.get("/hold/{hold_id}", response_model=HoldStatusResponse)

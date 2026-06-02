@@ -38,6 +38,7 @@ class GraphLink(BaseModel):
     call_count: int
     spend: float
     has_violation: bool
+    kind: str = "vendor"   # 'vendor' (agent→vendor) | 'agent' (agent→sub-agent)
 
 
 class FleetInfo(BaseModel):
@@ -150,6 +151,17 @@ async def fleet_graph(
             call_count=e["count"], spend=e["spend"],
             has_violation=agent_crit.get(aid, False),
         ))
+
+    # ── Agent → sub-agent links (multi-agent topology) ───────────────────────
+    agent_id_set = {str(a.id) for a in agents}
+    for a in agents:
+        if a.parent_agent_id and str(a.parent_agent_id) in agent_id_set:
+            links.append(GraphLink(
+                source=str(a.parent_agent_id), target=str(a.id),
+                call_count=0, spend=0.0,
+                has_violation=agent_crit.get(str(a.id), False),
+                kind="agent",
+            ))
 
     fleet_info = [
         FleetInfo(id=str(f.id), name=f.name,
