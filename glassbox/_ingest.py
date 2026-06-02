@@ -110,12 +110,17 @@ class IngestClient:
     # ── Public API ─────────────────────────────────────────────────────────
 
     def start_trace(self, trace: "AgentTrace") -> None:
-        self._post_async("/api/ingest/trace/start", {
-            "trace_id": trace.trace_id,
-            "session_start": trace.session_start,
-            "task_description": trace.task_description,
-            "jurisdiction": trace.jurisdiction,
-        })
+        # Synchronous: the trace must be registered before any step or hold is
+        # sent, otherwise an early guardrail can race ahead and 404.
+        try:
+            self._post("/api/ingest/trace/start", {
+                "trace_id": trace.trace_id,
+                "session_start": trace.session_start,
+                "task_description": trace.task_description,
+                "jurisdiction": trace.jurisdiction,
+            })
+        except Exception:
+            pass
 
     def send_step(self, trace_id: str, step: "TraceStep") -> None:
         self._post_async(f"/api/ingest/trace/{trace_id}/step", step_to_dict(step))

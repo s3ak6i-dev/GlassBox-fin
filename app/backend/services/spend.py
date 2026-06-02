@@ -26,6 +26,12 @@ DEFAULT_PRICING: dict[str, dict[str, float]] = {
     # Mistral
     "mistral-large":        {"input": 0.000003,   "output": 0.000009},
     "mistral-small":        {"input": 0.000001,   "output": 0.000003},
+    # Meta (Llama via Groq/Together/etc.) — nominal
+    "llama-3.3-70b":        {"input": 0.00000059, "output": 0.00000079},
+    "llama-3.1-8b":         {"input": 0.00000005, "output": 0.00000008},
+    "llama-3.1-70b":        {"input": 0.00000059, "output": 0.00000079},
+    "llama3":               {"input": 0.00000005, "output": 0.00000008},
+    "gemma2":               {"input": 0.0000002,  "output": 0.0000002},
 }
 
 
@@ -40,10 +46,12 @@ def detect_vendor(model: str) -> str:
         return "openai"
     if m.startswith("claude"):
         return "anthropic"
-    if m.startswith("gemini"):
+    if m.startswith(("gemini", "gemma")):
         return "google"
     if m.startswith(("mistral", "mixtral")):
         return "mistral"
+    if m.startswith("llama"):
+        return "meta"
     return "unknown"
 
 

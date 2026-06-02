@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import time
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Any, Callable, Optional
 from uuid import uuid4
 
 from glassbox.guardrails.engine import GuardrailEngine
@@ -193,6 +194,39 @@ class AuditSession:
             return []
         guardrail_violations = self._trace.metadata.get("guardrail_violations", [])
         return guardrail_violations + self._post_session_violations
+
+    # ── Manual instrumentation (for custom / raw agents) ────────────────────────
+
+    def llm_call(self, model: str, prompt: str, fn: Callable[[], str],
+                 token_count: Optional[int] = None) -> str:
+        """Record an LLM call around fn(). fn must return the model's text output."""
+        step = self._require_collector().begin_step("llm_call", model=model, prompt=prompt)
+        t0 = time.perf_counter()
+        out = fn()
+        step.token_count = token_count
+        self._collector.complete_step(step, str(out), (time.perf_counter() - t0) * 1000)
+        return out
+
+    def tool_call(self, name: str, arguments: dict, fn: Callable[[], Any]) -> Any:
+        """Record a tool call around fn(). PRE_CALL guardrails (e.g. PII) fire
+        BEFORE fn() runs — so a paused/denied call never executes the tool."""
+        step = self._require_collector().begin_step(
+            "tool_call", tool_name=name, tool_arguments=arguments)
+        t0 = time.perf_counter()
+        out = fn()
+        self._collector.complete_step(step, str(out), (time.perf_counter() - t0) * 1000)
+        return out
+
+    def decision(self, output: str) -> str:
+        """Record a final decision. PRE_DECISION guardrails fire on entry."""
+        step = self._require_collector().begin_step("decision", output=output)
+        self._collector.complete_step(step, output, 0.0)
+        return output
+
+    def _require_collector(self) -> TraceCollector:
+        if self._collector is None:
+            raise RuntimeError("Use these inside the AuditSession `with` block")
+        return self._collector
 
     # ── Output ─────────────────────────────────────────────────────────────────
 
