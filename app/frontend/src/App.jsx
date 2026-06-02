@@ -15,6 +15,7 @@ import SpendDashboard from './pages/SpendDashboard.jsx'
 import RuleManager from './pages/RuleManager.jsx'
 import Reports from './pages/Reports.jsx'
 import Settings from './pages/Settings.jsx'
+import Docs from './pages/Docs.jsx'
 
 function LoadingScreen() {
   return (
@@ -59,6 +60,7 @@ export default function App() {
         <Route path="spend" element={<SpendDashboard />} />
         <Route path="rules" element={<RuleManager />} />
         <Route path="reports" element={<Reports />} />
+        <Route path="docs" element={<Docs />} />
         <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>

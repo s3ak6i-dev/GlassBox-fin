@@ -28,6 +28,7 @@ const NAV = [
   },
   {
     items: [
+      { to: '/docs', icon: '◳', label: 'Connect agent' },
       { to: '/settings', icon: '⚙', label: 'Settings' },
     ],
   },
