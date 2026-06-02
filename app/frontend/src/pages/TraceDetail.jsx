@@ -6,6 +6,7 @@ import Card from '../components/ui/Card.jsx'
 import Button from '../components/ui/Button.jsx'
 import SeverityBadge from '../components/ui/SeverityBadge.jsx'
 import { Terminal } from '../components/ui/Terminal.jsx'
+import { reportsApi, downloadBlob } from '../api/spend.js'
 import { fullDateTime, shortTime } from '../lib/format.js'
 
 function StepLine({ idx, step, violations }) {
@@ -51,6 +52,7 @@ export default function TraceDetail() {
   const [trace, setTrace] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [exporting, setExporting] = useState(false)
 
   useEffect(() => {
     tracesApi.get(token, id)
@@ -58,6 +60,16 @@ export default function TraceDetail() {
       .catch(e => setError(e.message))
       .finally(() => setLoading(false))
   }, [token, id])
+
+  async function exportPdf() {
+    setExporting(true)
+    try {
+      const blob = await reportsApi.traceBlob(token, id)
+      downloadBlob(blob, `compliance_${id.slice(0, 8)}.pdf`)
+    } catch { /* ignore */ } finally {
+      setExporting(false)
+    }
+  }
 
   if (loading) return <div className="gb-page"><div style={{ display: 'flex', justifyContent: 'center', padding: 60 }}><div className="gb-spinner" /></div></div>
   if (error || !trace) return <div className="gb-page"><Card brackets><div className="gb-empty"><span className="gb-empty-icon">⊘</span><div className="gb-empty-title">Trace not found</div></div></Card></div>
@@ -74,7 +86,9 @@ export default function TraceDetail() {
             {trace.agent_name} · {fullDateTime(trace.session_start)} · {trace.jurisdiction || '—'}
           </p>
         </div>
-        <Button variant="primary" disabled title="PDF export lands in Session 8">↧ Export PDF</Button>
+        <Button variant="primary" onClick={exportPdf} disabled={exporting}>
+          {exporting ? 'Generating…' : '↧ Export PDF'}
+        </Button>
       </div>
 
       {/* summary chips */}

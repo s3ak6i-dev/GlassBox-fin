@@ -7,7 +7,7 @@ from app.backend.config import settings
 from app.backend.db import create_all_tables
 from app.backend.routers import (
     auth, orgs, workspaces, fleets, agents, ingest, holds, vendors, rulesets,
-    traces, stats, violations, graph
+    traces, stats, violations, graph, spend, reports
 )
 
 
@@ -40,6 +40,8 @@ app.include_router(traces.router)
 app.include_router(stats.router)
 app.include_router(violations.router)
 app.include_router(graph.router)
+app.include_router(spend.router)
+app.include_router(reports.router)
 
 
 @app.get("/api/health")
