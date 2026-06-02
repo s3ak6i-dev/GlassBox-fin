@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth.js'
 import { orgApi } from '../../api/org.js'
+import { authApi } from '../../api/auth.js'
 import StepShell from './StepShell.jsx'
 import Button from '../../components/ui/Button.jsx'
 import Input from '../../components/ui/Input.jsx'
@@ -10,7 +11,8 @@ const JURISDICTIONS = ['EU', 'UK', 'US']
 const INDUSTRIES = ['Financial Services', 'Banking', 'Insurance', 'Fintech', 'Investment / Wealth', 'Other']
 
 export default function Step1Org({ next }) {
-  const { token, org, refreshOrg } = useAuth()
+  const { token, user, org, refreshOrg, refreshUser } = useAuth()
+  const [name, setName] = useState(user?.name || '')
   const [industry, setIndustry] = useState(org?.industry || 'Financial Services')
   const [jurisdiction, setJurisdiction] = useState(org?.jurisdiction || 'EU')
   const [saving, setSaving] = useState(false)
@@ -18,6 +20,10 @@ export default function Step1Org({ next }) {
   async function handleNext() {
     setSaving(true)
     try {
+      if (name.trim()) {
+        await authApi.updateMe(token, { name: name.trim() })
+        await refreshUser()
+      }
       await orgApi.update(token, { industry, jurisdiction })
       await refreshOrg()
       next()
@@ -29,17 +35,29 @@ export default function Step1Org({ next }) {
   return (
     <StepShell
       step={0}
-      title={`Welcome, ${org?.name || 'there'}`}
-      sub="Confirm your organisation details. Your jurisdiction sets the default rule pack and the regulations each rule answers to."
+      title="Welcome to glassbox"
+      sub="Tell us who you are and confirm your organisation. Your jurisdiction sets the default rule pack and the regulations each rule answers to."
       footer={
         <>
           <span />
-          <Button variant="primary" onClick={handleNext} disabled={saving}>
+          <Button variant="primary" onClick={handleNext} disabled={saving || !name.trim()}>
             {saving ? 'Saving…' : 'Continue →'}
           </Button>
         </>
       }
     >
+      <div className={styles.field}>
+        <label className={styles.label}>Your name</label>
+        <Input
+          placeholder="e.g. Surya"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          autoFocus
+        />
+        <span style={{ fontSize: 11, color: 'var(--ink-faint)' }}>
+          We'll greet you by this on your home screen.
+        </span>
+      </div>
       <div className={styles.field}>
         <label className={styles.label}>Industry</label>
         <select className="gb-input" value={industry} onChange={e => setIndustry(e.target.value)}>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../hooks/useAuth.js'
 import { orgApi, vendorsApi } from '../api/org.js'
+import { authApi } from '../api/auth.js'
 import { agentsApi } from '../api/agents.js'
 import { statsApi } from '../api/traces.js'
 import Card from '../components/ui/Card.jsx'
@@ -41,7 +42,8 @@ export default function Settings() {
 }
 
 function OrgTab() {
-  const { token, org, refreshOrg } = useAuth()
+  const { token, user, org, refreshOrg, refreshUser } = useAuth()
+  const [yourName, setYourName] = useState(user?.name || '')
   const [name, setName] = useState(org?.name || '')
   const [industry, setIndustry] = useState(org?.industry || '')
   const [jurisdiction, setJurisdiction] = useState(org?.jurisdiction || 'EU')
@@ -51,6 +53,10 @@ function OrgTab() {
   async function save() {
     setSaving(true)
     try {
+      if (yourName.trim() && yourName.trim() !== (user?.name || '')) {
+        await authApi.updateMe(token, { name: yourName.trim() })
+        await refreshUser()
+      }
       await orgApi.update(token, { name, industry, jurisdiction })
       await refreshOrg()
       setSaved(true); setTimeout(() => setSaved(false), 2000)
@@ -60,6 +66,7 @@ function OrgTab() {
   return (
     <Card brackets>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 420 }}>
+        <Field label="Your name"><Input value={yourName} onChange={e => setYourName(e.target.value)} placeholder="How we greet you" /></Field>
         <Field label="Organization name"><Input value={name} onChange={e => setName(e.target.value)} /></Field>
         <Field label="Industry"><Input value={industry} onChange={e => setIndustry(e.target.value)} /></Field>
         <Field label="Jurisdiction">

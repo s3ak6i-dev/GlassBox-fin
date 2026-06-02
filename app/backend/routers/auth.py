@@ -13,6 +13,7 @@ from app.backend.schemas.auth import (
     LoginRequest,
     SignupRequest,
     TokenResponse,
+    UpdateMeRequest,
     UserResponse,
 )
 
@@ -36,13 +37,13 @@ async def _unique_slug(base: str, db: AsyncSession) -> str:
 
 async def _create_org_with_user(
     db: AsyncSession, *, email: str, org_name: str, jurisdiction: str,
-    password_hash: str | None, auth_provider: str,
+    password_hash: str | None, auth_provider: str, name: str | None = None,
 ) -> User:
     org = Organization(name=org_name, slug=await _unique_slug(_slugify(org_name), db), jurisdiction=jurisdiction)
     db.add(org)
     await db.flush()
     db.add(Workspace(org_id=org.id, name="production"))
-    user = User(org_id=org.id, email=email, password_hash=password_hash,
+    user = User(org_id=org.id, email=email, name=name, password_hash=password_hash,
                 auth_provider=auth_provider, role="admin")
     db.add(user)
     await db.commit()
@@ -92,14 +93,27 @@ async def google_login(body: GoogleAuthRequest, db: AsyncSession = Depends(get_d
     user = result.scalar_one_or_none()
     if not user:
         # first sign-in → create their org from the email/name
-        org_name = info.get("name") or email.split("@")[0]
+        person = info.get("name")
+        org_name = person or email.split("@")[0]
         user = await _create_org_with_user(
             db, email=email, org_name=org_name, jurisdiction="EU",
-            password_hash=None, auth_provider="google",
+            password_hash=None, auth_provider="google", name=person,
         )
     return TokenResponse(access_token=create_access_token(str(user.id)))
 
 
 @router.get("/me", response_model=UserResponse)
 async def me(user: User = Depends(get_current_user)):
+    return user
+
+
+@router.put("/me", response_model=UserResponse)
+async def update_me(
+    body: UpdateMeRequest,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    user.name = body.name.strip() or None
+    await db.commit()
+    await db.refresh(user)
     return user

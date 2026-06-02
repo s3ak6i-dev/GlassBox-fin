@@ -24,8 +24,13 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
 
 
+class UpdateMeRequest(BaseModel):
+    name: str
+
+
 class UserResponse(ORMModel):
     id: str
     email: str
+    name: str | None = None
     role: str
     org_id: str

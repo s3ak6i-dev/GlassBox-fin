@@ -12,6 +12,9 @@ export const authApi = {
 
   me: (token) =>
     apiFetch('/auth/me', { token }),
+
+  updateMe: (token, data) =>
+    apiFetch('/auth/me', { token, method: 'PUT', body: data }),
 }
 
 export const configApi = {

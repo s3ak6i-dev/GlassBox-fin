@@ -50,8 +50,15 @@ export function AuthProvider({ children }) {
     return orgData
   }, [token])
 
+  const refreshUser = useCallback(async () => {
+    if (!token) return
+    const me = await authApi.me(token)
+    setUser(me)
+    return me
+  }, [token])
+
   return (
-    <AuthContext.Provider value={{ token, user, org, workspace, loading, login, logout, refreshOrg }}>
+    <AuthContext.Provider value={{ token, user, org, workspace, loading, login, logout, refreshOrg, refreshUser }}>
       {children}
     </AuthContext.Provider>
   )

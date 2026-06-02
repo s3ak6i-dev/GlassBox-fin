@@ -29,8 +29,9 @@ export default function Home() {
     statsApi.overview(token, workspace.id).then(setStats).catch(() => {})
   }, [token, workspace])
 
-  const firstName = (user?.email || 'there').split('@')[0].split(/[.\-_]/)[0]
-  const name = firstName.charAt(0).toUpperCase() + firstName.slice(1)
+  const raw = user?.name?.trim() || (user?.email || 'there').split('@')[0].split(/[.\-_]/)[0]
+  const first = raw.split(/\s+/)[0]
+  const name = first.charAt(0).toUpperCase() + first.slice(1)
 
   const holds = stats?.holds_pending ?? 0
   const crit = stats?.critical_violations ?? 0
