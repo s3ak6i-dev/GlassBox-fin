@@ -174,6 +174,20 @@ class AuditSession:
         return self._trace
 
     @property
+    def callbacks(self) -> list:
+        """LangChain callback handlers to pass into your agent.
+
+        Modern LangChain attaches callbacks per-invocation, so wire these in:
+            agent.invoke(input, config={"callbacks": audit.callbacks})
+        """
+        out = []
+        for adapter in self._active_adapters:
+            handler = getattr(adapter, "handler", None)
+            if handler is not None:
+                out.append(handler)
+        return out
+
+    @property
     def violations(self) -> list[Violation]:
         if self._trace is None:
             return []

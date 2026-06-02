@@ -54,10 +54,31 @@ python examples/free_agent.py
 - **Violations** — if the underwriter skipped debt-to-income reasoning,
   `MISSING_DTI_RATIONALE` shows up
 
-## Want the pause → approve flow?
+## The pause → approve flow (LangChain)
 
-The raw agent above only emits LLM calls, so the CRITICAL `PII` rule (which
-guards *tool* arguments) can't fire. To see an agent literally pause and wait
-for your sign-off in the **Hold Inbox**, use a framework with tools (LangChain)
-and pass a tool call carrying PII — or just open the pre-seeded hold already in
-your dashboard. Ask and we'll drop in a LangChain example.
+[`langchain_agent.py`](langchain_agent.py) is a real LangChain tool-calling
+agent. Because it uses a **tool**, the CRITICAL `PII` rule can fire at the call
+boundary — so when the agent tries to pass the applicant's national ID into the
+notify tool, it **pauses and waits** for you to approve from the Hold Inbox.
+
+```bash
+pip install langchain langchain-openai
+$env:GROQ_API_KEY="gsk_..."            # tool-calling model (llama-3.3-70b)
+$env:GLASSBOX_KEY="<instrumentation-key>"
+python examples/langchain_agent.py
+```
+
+The agent prints "…it will pause…" and blocks. Open **Holds** in the dashboard,
+click **Approve**, and the agent resumes; click **Deny** and it's halted.
+
+### How the integration works
+
+glassbox wraps frameworks through their native callback/event systems:
+
+| Framework | Mechanism |
+|---|---|
+| **LangChain** | a `BaseCallbackHandler` (captures `on_chat_model_start`, `on_tool_start`, …). Pass it explicitly: `executor.invoke(x, config={"callbacks": audit.callbacks})` |
+| **LlamaIndex** | registered on the global `Settings.callback_manager` — captured automatically, no wiring needed |
+| **OpenAI / Anthropic / Groq / Ollama** | the SDK client is patched at the class level — captured automatically |
+
+`audit.callbacks` exposes the LangChain handler(s) for the active session.
