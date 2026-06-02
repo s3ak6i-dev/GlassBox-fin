@@ -1,4 +1,4 @@
-import { apiFetch } from './client.js'
+import { apiFetch, API_ORIGIN } from './client.js'
 
 export const spendApi = {
   breakdown: (token, workspaceId, days = 30) =>
@@ -8,7 +8,7 @@ export const spendApi = {
 export const reportsApi = {
   // returns a Blob for download
   generatePeriod: async (token, workspaceId, days) => {
-    const res = await fetch('/api/reports/generate', {
+    const res = await fetch(`${API_ORIGIN}/api/reports/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ workspace_id: workspaceId, days }),
@@ -16,9 +16,9 @@ export const reportsApi = {
     if (!res.ok) throw new Error('Report generation failed')
     return res.blob()
   },
-  traceUrl: (traceId) => `/api/reports/trace/${traceId}`,
+  traceUrl: (traceId) => `${API_ORIGIN}/api/reports/trace/${traceId}`,
   traceBlob: async (token, traceId) => {
-    const res = await fetch(`/api/reports/trace/${traceId}`, {
+    const res = await fetch(`${API_ORIGIN}/api/reports/trace/${traceId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     if (!res.ok) throw new Error('Report generation failed')

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from './useAuth.js'
+import { API_ORIGIN } from '../api/client.js'
 
 // path may already contain a query string (e.g. ?workspace_id=...).
 // token is appended with the correct separator since EventSource can't set headers.
@@ -15,7 +16,7 @@ export function useSSE(path, { enabled = true, onEvent } = {}) {
     if (!enabled || !token || !path) return
 
     const sep = path.includes('?') ? '&' : '?'
-    const url = `/api${path}${sep}token=${encodeURIComponent(token)}`
+    const url = `${API_ORIGIN}/api${path}${sep}token=${encodeURIComponent(token)}`
     const es = new EventSource(url)
     esRef.current = es
 

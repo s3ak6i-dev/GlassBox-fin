@@ -1,0 +1,19 @@
+# Render blueprint — one Docker web service serving API + dashboard.
+# Deploy: push to GitHub, then Render ▸ New ▸ Blueprint ▸ pick this repo.
+services:
+  - type: web
+    name: glassbox
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter            # SSE needs an always-on instance (not free/sleep)
+    healthCheckPath: /api/health
+    numInstances: 1          # in-process SSE bus → exactly one instance
+    envVars:
+      - key: DATABASE_URL
+        sync: false          # set to your Neon connection string
+      - key: SECRET_KEY
+        generateValue: true  # Render generates a strong secret
+      - key: ACCESS_TOKEN_EXPIRE_DAYS
+        value: "7"
+      - key: CORS_ORIGINS
+        value: "*"           # same-origin serving; tighten if you split hosts

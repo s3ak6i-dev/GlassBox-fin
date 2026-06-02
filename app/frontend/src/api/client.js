@@ -1,4 +1,7 @@
-const BASE = '/api'
+// Same-origin by default (backend serves the SPA). For a split deploy,
+// set VITE_API_URL to the backend origin at build time.
+export const API_ORIGIN = import.meta.env.VITE_API_URL || ''
+const BASE = `${API_ORIGIN}/api`
 
 export class ApiError extends Error {
   constructor(message, status) {

@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+
+# Node / build artifacts (frontend is rebuilt inside the image)
+app/frontend/node_modules/
+app/frontend/dist/
+
+# Env / secrets
+.env
+app/backend/.env
+
+# Git / IDE / OS
+.git/
+.github/
+.vscode/
+.idea/
+.DS_Store
+
+# Docs & local data
+docs/
+postgres_data/
+*.md
+!README.md
