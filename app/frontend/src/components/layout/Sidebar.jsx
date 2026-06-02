@@ -5,7 +5,8 @@ import styles from './Sidebar.module.css'
 const NAV = [
   {
     items: [
-      { to: '/app',            tour: 'overview',   icon: '◈', label: 'Overview', end: true },
+      { to: '/app',            tour: 'home',       icon: '⌂', label: 'Home', end: true },
+      { to: '/app/overview',   tour: 'overview',   icon: '◈', label: 'Overview' },
       { to: '/app/holds',      tour: 'holds',      icon: '⏸', label: 'Holds', badge: true },
       { to: '/app/traces',     tour: 'traces',     icon: '≡', label: 'Trace Explorer' },
       { to: '/app/violations', tour: 'violations', icon: '△', label: 'Violations' },

@@ -8,6 +8,7 @@ export const LANDING_HTML = `<!-- ============================ NAV =============
       <a href="#guardrails">Guardrails</a>
       <a href="#rules">Rules</a>
       <a href="#install">Install</a>
+      <a href="#faq">FAQ</a>
       <a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
     <a href="#install" class="pill">
@@ -569,6 +570,39 @@ audit.<span class="c-fn">report</span>(<span class="c-str">"compliance.pdf"</spa
           <div class="val">Apache 2.0 <span class="em">·</span> open source</div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section id="faq" style="padding-top: 30px;">
+  <div class="wrap">
+    <div class="section-label reveal">FAQ — the questions we get most</div>
+    <div class="faq reveal">
+      <details class="faq-item">
+        <summary>Does my agent run on your servers?<span class="faq-mark">+</span></summary>
+        <p>No. Your agent runs in your own infrastructure — laptop, server, or cloud function. glassbox wraps it with an <code>AuditSession</code> and streams trace metadata to your dashboard via an instrumentation key. We never execute your agent.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is my data safe?<span class="faq-mark">+</span></summary>
+        <p>PII is redacted before storage by default, every trace is SHA-256 hash-chained so it's tamper-evident, and you can self-host the whole platform on your own Postgres. Prompts and tool arguments are never persisted unless you opt in.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Which frameworks does it support?<span class="faq-mark">+</span></summary>
+        <p>OpenAI, Anthropic, Groq, Ollama and any OpenAI-compatible endpoint are captured automatically. LangChain &amp; LangGraph via a callback handler, LlamaIndex via its global callback manager, plus a manual API for fully custom agents.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is it free?<span class="faq-mark">+</span></summary>
+        <p>The Python library is open source under Apache 2.0 — free forever. The hosted dashboard has a free tier for individual developers, with paid plans for teams and long-retention compliance storage.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Why does this exist?<span class="faq-mark">+</span></summary>
+        <p>The EU AI Act designates credit scoring and fraud detection as high-risk AI, mandating audit trails and human oversight from 2026. No open-source tooling addressed this for LLM agents. glassbox is that missing layer.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I run the whole thing myself?<span class="faq-mark">+</span></summary>
+        <p>Yes — it ships as a single Docker image. Point it at any Postgres (we like Neon), set two env vars, and you have the full dashboard + API on your own infrastructure.</p>
+      </details>
     </div>
   </div>
 </section>

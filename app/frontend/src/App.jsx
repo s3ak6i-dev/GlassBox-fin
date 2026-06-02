@@ -17,11 +17,25 @@ import Reports from './pages/Reports.jsx'
 import Settings from './pages/Settings.jsx'
 import Docs from './pages/Docs.jsx'
 import Landing from './pages/Landing.jsx'
+import Home from './pages/Home.jsx'
 
 function LoadingScreen() {
   return (
-    <div className="gb-backdrop" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div className="gb-spinner" style={{ position: 'relative', zIndex: 1 }} />
+    <div className="gb-backdrop" style={{
+      minHeight: '100vh', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center', gap: 20,
+    }}>
+      <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+        <div style={{ fontSize: 18, letterSpacing: '-0.01em', color: 'var(--ink)', marginBottom: 18 }}>
+          <b style={{ color: '#fff' }}>glass</b>box<span style={{ color: 'var(--cyan)' }}>·</span>fin
+        </div>
+        <div className="gb-spinner" style={{ margin: '0 auto' }} />
+        <div style={{
+          marginTop: 16, fontFamily: 'var(--font-mono)', fontSize: 12.5, color: 'var(--ink-3)',
+        }}>
+          Spinning up your workspace…
+        </div>
+      </div>
     </div>
   )
 }
@@ -55,7 +69,8 @@ export default function App() {
 
       {/* authenticated product */}
       <Route path="/app" element={<RequireAuth><AppShell /></RequireAuth>}>
-        <Route index element={<Overview />} />
+        <Route index element={<Home />} />
+        <Route path="overview" element={<Overview />} />
         <Route path="holds" element={<HoldInbox />} />
         <Route path="traces" element={<TraceExplorer />} />
         <Route path="traces/:id" element={<TraceDetail />} />

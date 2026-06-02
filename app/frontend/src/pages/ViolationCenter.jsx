@@ -6,6 +6,7 @@ import Card from '../components/ui/Card.jsx'
 import Input from '../components/ui/Input.jsx'
 import FilterPill from '../components/ui/FilterPill.jsx'
 import SeverityBadge from '../components/ui/SeverityBadge.jsx'
+import PageHint from '../components/ui/PageHint.jsx'
 import { relativeTime } from '../lib/format.js'
 
 const SEVS = [
@@ -52,6 +53,11 @@ export default function ViolationCenter() {
         <div>
           <h1 className="gb-page-title">Violation Center</h1>
           <p className="gb-page-sub">Every compliance violation across your fleet, mapped to its regulation</p>
+          <PageHint>
+            Every breach a rule caught, across all agents. Filter by severity, expand a row for the
+            regulation it answers to and how to remediate it, then jump straight to the trace where it
+            happened. Resolution shows whether it was approved, denied, logged or auto-halted.
+          </PageHint>
         </div>
       </div>
 

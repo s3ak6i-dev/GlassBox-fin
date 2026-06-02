@@ -7,6 +7,7 @@ import Card from '../components/ui/Card.jsx'
 import Button from '../components/ui/Button.jsx'
 import SeverityBadge from '../components/ui/SeverityBadge.jsx'
 import LiveBadge from '../components/ui/LiveBadge.jsx'
+import PageHint from '../components/ui/PageHint.jsx'
 import { fullDateTime } from '../lib/format.js'
 
 const SLA_SECONDS = 300  // escalate to critical styling after 5 minutes
@@ -70,6 +71,11 @@ export default function HoldInbox() {
         <div>
           <h1 className="gb-page-title">Hold Inbox</h1>
           <p className="gb-page-sub">Agent executions paused at the call boundary, waiting for your decision</p>
+          <PageHint>
+            When an agent hits a CRITICAL guardrail set to <b>pause</b>, it stops <i>before</i> the
+            risky call runs and waits here. <b>Approve</b> and the agent resumes; <b>Deny</b> and the
+            call is blocked. Cards escalate to red if they breach the 5-minute SLA.
+          </PageHint>
         </div>
         <LiveBadge />
       </div>

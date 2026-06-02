@@ -4,6 +4,7 @@ import { spendApi } from '../api/spend.js'
 import Card from '../components/ui/Card.jsx'
 import StatCard from '../components/ui/StatCard.jsx'
 import SegmentedControl from '../components/ui/SegmentedControl.jsx'
+import PageHint from '../components/ui/PageHint.jsx'
 import { money } from '../lib/format.js'
 
 const DIMS = [
@@ -72,6 +73,11 @@ export default function SpendDashboard() {
         <div>
           <h1 className="gb-page-title">Spend</h1>
           <p className="gb-page-sub">LLM cost estimated from token counts across every agent and vendor</p>
+          <PageHint>
+            Cost is estimated from the token counts in your traces, priced per model. Switch the
+            breakdown between vendor, model and agent, and change the window with the period
+            toggle. The daily line shows spend over time.
+          </PageHint>
         </div>
         <SegmentedControl options={PERIODS.map(p => ({ value: String(p.value), label: p.label }))}
           value={String(days)} onChange={v => setDays(Number(v))} size="sm" />

@@ -7,6 +7,7 @@ import StatCard from '../components/ui/StatCard.jsx'
 import FleetGraph from '../components/features/fleet/FleetGraph.jsx'
 import FleetGrid from '../components/features/fleet/FleetGrid.jsx'
 import NodeDrawer from '../components/features/fleet/NodeDrawer.jsx'
+import PageHint from '../components/ui/PageHint.jsx'
 import { money } from '../lib/format.js'
 
 export default function FleetView() {
@@ -62,6 +63,11 @@ export default function FleetView() {
         <div>
           <h1 className="gb-page-title">Fleet</h1>
           <p className="gb-page-sub">Compliance topology — agents, the vendors they call, and where violations flow</p>
+          <PageHint>
+            Squares are agents (coloured by health), hexagons are LLM vendors. Solid edges are
+            API calls; dashed arrows are agent-to-agent delegation; red animated edges carry a
+            critical violation. Drag to rearrange, scroll to zoom, click a node to inspect it.
+          </PageHint>
         </div>
         <SegmentedControl
           options={[{ value: 'graph', label: '◉ Graph' }, { value: 'grid', label: '⊞ Grid' }]}

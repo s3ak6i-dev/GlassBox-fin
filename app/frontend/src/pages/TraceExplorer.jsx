@@ -7,6 +7,7 @@ import Card from '../components/ui/Card.jsx'
 import Input from '../components/ui/Input.jsx'
 import LiveBadge from '../components/ui/LiveBadge.jsx'
 import FilterPill from '../components/ui/FilterPill.jsx'
+import PageHint from '../components/ui/PageHint.jsx'
 import { relativeTime } from '../lib/format.js'
 
 const OUTCOMES = [
@@ -63,6 +64,11 @@ export default function TraceExplorer() {
         <div>
           <h1 className="gb-page-title">Trace Explorer</h1>
           <p className="gb-page-sub">Every agent execution, searchable and filterable</p>
+          <PageHint>
+            Each row is one agent run, streamed in live. The violations column shows what was
+            flagged; outcome tells you if it <b>completed</b>, was <b>halted</b> by a guardrail, or is
+            still <b>running</b>. Click any trace for the step-by-step record and its hash-chain proof.
+          </PageHint>
         </div>
         <LiveBadge />
       </div>
