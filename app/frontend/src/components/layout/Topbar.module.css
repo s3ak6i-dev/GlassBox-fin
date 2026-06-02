@@ -25,6 +25,19 @@
 
 .right { display: flex; align-items: center; gap: 12px; }
 
+.help {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--line-2);
+  background: var(--glass);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: color 0.18s, border-color 0.18s;
+}
+.help:hover { color: var(--cyan); border-color: rgba(var(--cyan-rgb), 0.5); }
+
 .user { display: flex; align-items: center; gap: 9px; }
 
 .avatar {

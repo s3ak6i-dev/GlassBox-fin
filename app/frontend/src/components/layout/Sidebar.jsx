@@ -55,6 +55,7 @@ export default function Sidebar({ holdCount = 0 }) {
                 key={item.to}
                 to={item.to}
                 end={item.to === '/'}
+                data-tour={item.to === '/' ? 'overview' : item.to.slice(1)}
                 className={({ isActive }) =>
                   `${styles.navItem} ${isActive ? styles.active : ''}`
                 }
