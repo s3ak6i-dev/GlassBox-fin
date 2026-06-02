@@ -110,7 +110,7 @@ export default function ViolationCenter() {
                       </div>
                       {v.trace_id && (
                         <button
-                          onClick={(e) => { e.stopPropagation(); navigate(`/traces/${v.trace_id}`) }}
+                          onClick={(e) => { e.stopPropagation(); navigate(`/app/traces/${v.trace_id}`) }}
                           style={{ alignSelf: 'flex-start', background: 'none', border: '1px solid var(--line-2)', borderRadius: 7, color: 'var(--cyan)', padding: '7px 13px', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: 12 }}
                         >
                           View trace →

@@ -24,7 +24,7 @@ export default function Signup() {
     try {
       const { access_token } = await authApi.signup(form.email, form.password, form.orgName, form.jurisdiction)
       login(access_token)
-      navigate('/')
+      navigate('/app')
     } catch (err) {
       setError(err.message || 'Signup failed')
     } finally {

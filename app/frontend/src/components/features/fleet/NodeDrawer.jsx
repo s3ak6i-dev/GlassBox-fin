@@ -54,7 +54,7 @@ export default function NodeDrawer({ node, onClose }) {
           {traces.length === 0 ? (
             <div style={{ color: 'var(--ink-faint)', fontSize: 12 }}>No traces yet.</div>
           ) : traces.map(t => (
-            <div key={t.id} onClick={() => navigate(`/traces/${t.trace_id}`)}
+            <div key={t.id} onClick={() => navigate(`/app/traces/${t.trace_id}`)}
               style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: '1px solid var(--line)', cursor: 'pointer' }}>
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: t.halted ? 'var(--critical)' : t.violation_count ? 'var(--high)' : 'var(--pass)' }} />
               <span style={{ flex: 1, fontSize: 12, color: 'var(--ink-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

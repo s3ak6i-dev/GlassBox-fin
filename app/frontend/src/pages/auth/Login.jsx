@@ -21,7 +21,7 @@ export default function Login() {
     try {
       const { access_token } = await authApi.login(email, password)
       login(access_token)
-      navigate('/')
+      navigate('/app')
     } catch (err) {
       setError(err.message || 'Login failed')
     } finally {

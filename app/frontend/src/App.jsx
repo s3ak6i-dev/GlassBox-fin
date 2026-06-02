@@ -16,6 +16,7 @@ import RuleManager from './pages/RuleManager.jsx'
 import Reports from './pages/Reports.jsx'
 import Settings from './pages/Settings.jsx'
 import Docs from './pages/Docs.jsx'
+import Landing from './pages/Landing.jsx'
 
 function LoadingScreen() {
   return (
@@ -39,17 +40,21 @@ function RequireOnboarding({ children }) {
   const { token, loading, org } = useAuth()
   if (loading) return <LoadingScreen />
   if (!token) return <Navigate to="/login" replace />
-  if (org && org.onboarded) return <Navigate to="/" replace />
+  if (org && org.onboarded) return <Navigate to="/app" replace />
   return children
 }
 
 export default function App() {
   return (
     <Routes>
+      {/* public */}
+      <Route path="/" element={<Landing />} />
       <Route path="/login"  element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/onboarding" element={<RequireOnboarding><Onboarding /></RequireOnboarding>} />
-      <Route path="/" element={<RequireAuth><AppShell /></RequireAuth>}>
+
+      {/* authenticated product */}
+      <Route path="/app" element={<RequireAuth><AppShell /></RequireAuth>}>
         <Route index element={<Overview />} />
         <Route path="holds" element={<HoldInbox />} />
         <Route path="traces" element={<TraceExplorer />} />
@@ -63,6 +68,8 @@ export default function App() {
         <Route path="docs" element={<Docs />} />
         <Route path="settings" element={<Settings />} />
       </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }

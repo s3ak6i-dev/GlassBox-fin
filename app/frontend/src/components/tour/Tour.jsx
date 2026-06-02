@@ -52,7 +52,7 @@ const STEPS = [
     center: true,
     title: "You're all set",
     body: 'Connect your first agent and watch it light up across these screens.',
-    cta: { label: 'Connect an agent →', to: '/docs' },
+    cta: { label: 'Connect an agent →', to: '/app/docs' },
   },
 ]
 

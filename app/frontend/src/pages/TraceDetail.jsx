@@ -78,7 +78,7 @@ export default function TraceDetail() {
     <div className="gb-page">
       <div className="gb-page-header">
         <div>
-          <button onClick={() => navigate('/traces')} style={{ background: 'none', border: 'none', color: 'var(--ink-3)', cursor: 'pointer', fontSize: 12, marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
+          <button onClick={() => navigate('/app/traces')} style={{ background: 'none', border: 'none', color: 'var(--ink-3)', cursor: 'pointer', fontSize: 12, marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
             ← Trace Explorer
           </button>
           <h1 className="gb-page-title">{trace.task_description || 'Untitled trace'}</h1>

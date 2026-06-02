@@ -25,7 +25,7 @@ export default function Onboarding() {
   async function finish() {
     await orgApi.update(token, { onboarded: true })
     await refreshOrg()
-    navigate('/')
+    navigate('/app')
   }
 
   const common = { data, patch, next, back }

@@ -79,7 +79,7 @@ export default function Overview() {
               {recent.map(t => (
                 <div
                   key={t.id}
-                  onClick={() => navigate(`/traces/${t.trace_id}`)}
+                  onClick={() => navigate(`/app/traces/${t.trace_id}`)}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 12, padding: '10px 4px',
                     borderBottom: '1px solid var(--line)', cursor: 'pointer',

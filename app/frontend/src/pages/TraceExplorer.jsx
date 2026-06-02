@@ -105,7 +105,7 @@ export default function TraceExplorer() {
               key={t.id}
               className="gb-table-row"
               style={{ gridTemplateColumns: COLS }}
-              onClick={() => navigate(`/traces/${t.trace_id}`)}
+              onClick={() => navigate(`/app/traces/${t.trace_id}`)}
             >
               <div style={{ color: 'var(--ink-3)', fontSize: 12 }}>{relativeTime(t.session_start)}</div>
               <div style={{ color: 'var(--ink)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

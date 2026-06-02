@@ -5,31 +5,31 @@ import styles from './Sidebar.module.css'
 const NAV = [
   {
     items: [
-      { to: '/',           icon: '◈', label: 'Overview' },
-      { to: '/holds',      icon: '⏸', label: 'Holds',          badge: true },
-      { to: '/traces',     icon: '≡', label: 'Trace Explorer' },
-      { to: '/violations', icon: '△', label: 'Violations' },
+      { to: '/app',            tour: 'overview',   icon: '◈', label: 'Overview', end: true },
+      { to: '/app/holds',      tour: 'holds',      icon: '⏸', label: 'Holds', badge: true },
+      { to: '/app/traces',     tour: 'traces',     icon: '≡', label: 'Trace Explorer' },
+      { to: '/app/violations', tour: 'violations', icon: '△', label: 'Violations' },
     ],
   },
   {
     label: 'Fleet',
     items: [
-      { to: '/fleets', icon: '⬡', label: 'Fleets' },
-      { to: '/agents', icon: '●', label: 'Agents' },
+      { to: '/app/fleets', tour: 'fleets', icon: '⬡', label: 'Fleets' },
+      { to: '/app/agents', tour: 'agents', icon: '●', label: 'Agents' },
     ],
   },
   {
     label: 'Finance',
     items: [
-      { to: '/spend',   icon: '$', label: 'Spend' },
-      { to: '/rules',   icon: '⊞', label: 'Rules' },
-      { to: '/reports', icon: '↧', label: 'Reports' },
+      { to: '/app/spend',   tour: 'spend',   icon: '$', label: 'Spend' },
+      { to: '/app/rules',   tour: 'rules',   icon: '⊞', label: 'Rules' },
+      { to: '/app/reports', tour: 'reports', icon: '↧', label: 'Reports' },
     ],
   },
   {
     items: [
-      { to: '/docs', icon: '◳', label: 'Connect agent' },
-      { to: '/settings', icon: '⚙', label: 'Settings' },
+      { to: '/app/docs',     tour: 'docs',     icon: '◳', label: 'Connect agent' },
+      { to: '/app/settings', tour: 'settings', icon: '⚙', label: 'Settings' },
     ],
   },
 ]
@@ -40,7 +40,7 @@ export default function Sidebar({ holdCount = 0 }) {
 
   return (
     <aside className={styles.sidebar}>
-      <NavLink to="/" className={styles.brand}>
+      <NavLink to="/app" end className={styles.brand}>
         <b>glass</b>box<span className={styles.dot}>·</span>fin
       </NavLink>
 
@@ -54,8 +54,8 @@ export default function Sidebar({ holdCount = 0 }) {
               <NavLink
                 key={item.to}
                 to={item.to}
-                end={item.to === '/'}
-                data-tour={item.to === '/' ? 'overview' : item.to.slice(1)}
+                end={item.end}
+                data-tour={item.tour}
                 className={({ isActive }) =>
                   `${styles.navItem} ${isActive ? styles.active : ''}`
                 }
