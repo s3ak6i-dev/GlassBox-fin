@@ -53,6 +53,30 @@ class AuditSession:
         self._post_session_violations: list[Violation] = []
         self._ingest: Optional[object] = None
 
+    @classmethod
+    def from_env(cls, name: Optional[str] = None, **overrides) -> "AuditSession":
+        """Build a session from GLASSBOX_* environment variables.
+
+        Lets `glassbox run -- python agent.py` wire everything up so your code
+        only needs:  ``with AuditSession.from_env("my agent"): ...``
+
+        Reads GLASSBOX_KEY, GLASSBOX_API_URL, GLASSBOX_JURISDICTION,
+        GLASSBOX_EXPORT. Explicit keyword overrides win.
+        """
+        import os
+
+        env_kwargs: dict[str, Any] = {}
+        if os.environ.get("GLASSBOX_KEY"):
+            env_kwargs["instrumentation_key"] = os.environ["GLASSBOX_KEY"]
+        if os.environ.get("GLASSBOX_API_URL"):
+            env_kwargs["api_url"] = os.environ["GLASSBOX_API_URL"]
+        if os.environ.get("GLASSBOX_JURISDICTION"):
+            env_kwargs["jurisdiction"] = os.environ["GLASSBOX_JURISDICTION"]
+        if os.environ.get("GLASSBOX_EXPORT"):
+            env_kwargs["export"] = os.environ["GLASSBOX_EXPORT"]
+        env_kwargs.update(overrides)
+        return cls(name=name, **env_kwargs)
+
     def __enter__(self) -> "AuditSession":
         self._trace = AgentTrace(
             trace_id=str(uuid4()),

@@ -23,7 +23,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
-dependencies = ["reportlab>=4.0"]
+dependencies = ["reportlab>=4.0", "rich>=13.0", "pyfiglet>=1.0"]
 
 [project.urls]
 Homepage = "https://github.com/s3ak6i-dev/Glassdoor-fin"
@@ -40,6 +40,8 @@ all        = ["glassbox-fin[langchain,llamaindex,openai,anthropic,dev]"]
 
 [project.scripts]
 glassbox-fin = "glassbox.cli:main"
+glassbox = "glassbox.cli:main"
+gbx = "glassbox.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["glassbox"]

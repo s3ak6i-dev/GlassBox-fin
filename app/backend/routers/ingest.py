@@ -318,6 +318,19 @@ async def spawn_subagent(
     return {"instrumentation_key": str(child.instrumentation_key), "agent_id": str(child.id)}
 
 
+# ── GET /api/ingest/ping ─────────────────────────────────────────────────────
+# Lets the CLI validate an instrumentation key without side effects.
+
+@router.get("/ping")
+async def ping(agent: Agent = Depends(_get_agent_dep)):
+    return {
+        "ok": True,
+        "agent": agent.name,
+        "agent_id": str(agent.id),
+        "workspace_id": str(agent.workspace_id),
+    }
+
+
 # ── GET /api/ingest/hold/{hold_id} ───────────────────────────────────────────
 
 @router.get("/hold/{hold_id}", response_model=HoldStatusResponse)
