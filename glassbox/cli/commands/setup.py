@@ -97,6 +97,48 @@ def cmd_install(args: argparse.Namespace) -> int:
     return proc.returncode
 
 
+COMMANDS = (
+    "init doctor install completion key run watch verify validate violations "
+    "report show tail diff login status holds"
+)
+
+
+def cmd_completion(args: argparse.Namespace) -> int:
+    """Print a shell-completion script to stdout (source/eval it)."""
+    shell = args.shell
+    if shell == "bash":
+        script = f"""# glassbox bash completion — add to ~/.bashrc:
+#   eval "$(glassbox completion bash)"
+_glassbox_complete() {{
+    local cur="${{COMP_WORDS[COMP_CWORD]}}"
+    COMPREPLY=( $(compgen -W "{COMMANDS}" -- "$cur") )
+}}
+complete -F _glassbox_complete glassbox gbx glassbox-fin
+"""
+    elif shell == "zsh":
+        script = """# glassbox zsh completion — add to ~/.zshrc:
+#   eval "$(glassbox completion zsh)"
+autoload -Uz compinit && compinit
+compdef _gnu_generic glassbox gbx glassbox-fin
+"""
+    elif shell == "powershell":
+        cmds = ", ".join(f"'{c}'" for c in COMMANDS.split())
+        script = f"""# glassbox PowerShell completion — add to $PROFILE:
+#   glassbox completion powershell | Out-String | Invoke-Expression
+Register-ArgumentCompleter -Native -CommandName glassbox,gbx,glassbox-fin -ScriptBlock {{
+    param($wordToComplete, $commandAst, $cursorPosition)
+    @({cmds}) | Where-Object {{ $_ -like "$wordToComplete*" }} | ForEach-Object {{
+        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+    }}
+}}
+"""
+    else:
+        ui.fail(f"Unsupported shell '{shell}'")
+        return 1
+    print(script)
+    return 0
+
+
 def _yn(b: bool) -> str:
     if ui.is_json():
         return "ok" if b else "fail"

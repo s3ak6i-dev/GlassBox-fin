@@ -23,7 +23,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = argparse.ArgumentParser(
         prog="glassbox",
-        description="glassbox·fin — compliance guardrails & audit trails for LLM agents",
+        description="glassbox-fin - compliance guardrails & audit trails for LLM agents",
     )
     p.add_argument("--plain", action="store_true", help="No colors/banner (plain text)")
     p.add_argument("--no-color", action="store_true", help="Disable ANSI colors")
@@ -42,9 +42,13 @@ def build_parser() -> argparse.ArgumentParser:
     pd = sub.add_parser("doctor", help="Environment + connectivity health check")
     pd.set_defaults(func=setup.cmd_doctor)
 
-    pin = sub.add_parser("install", help="pip install an optional extra (openai, langchain, all, …)")
+    pin = sub.add_parser("install", help="pip install an optional extra (openai, langchain, all, ...)")
     pin.add_argument("extra", help="Extra to install")
     pin.set_defaults(func=setup.cmd_install)
+
+    pc = sub.add_parser("completion", help="Print a shell-completion script (bash/zsh/powershell)")
+    pc.add_argument("shell", choices=["bash", "zsh", "powershell"])
+    pc.set_defaults(func=setup.cmd_completion)
 
     # ── key ──────────────────────────────────────────────────────────────
     pk = sub.add_parser("key", help="Manage the instrumentation key")
@@ -137,6 +141,12 @@ _BANNER_COMMANDS = {"doctor", "status", None}
 
 
 def main(argv: list[str] | None = None) -> None:
+    # Make Unicode safe before argparse can print --help/--version on Windows.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
+        except Exception:
+            pass
     parser = build_parser()
     args = parser.parse_args(argv)
     ui.configure(plain=args.plain, no_color=args.no_color, json_mode=args.json)

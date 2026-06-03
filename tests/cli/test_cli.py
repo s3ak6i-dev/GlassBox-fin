@@ -67,6 +67,11 @@ def test_init_writes_project_config(isolated_config, capsys):
     assert data["api_url"] == "http://localhost:9999"
 
 
+def test_completion(capsys):
+    assert _run(["completion", "bash"]) == 0
+    assert "complete -F" in capsys.readouterr().out
+
+
 def test_verify(trail_file):
     assert _run(["verify", trail_file]) == 0
 

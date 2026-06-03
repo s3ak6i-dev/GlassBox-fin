@@ -55,6 +55,54 @@ multi-agent topologies. Runnable [examples](examples/) included.
 
 ---
 
+## The CLI
+
+Installing the package gives you the `glassbox` command (aliases: `gbx`,
+`glassbox-fin`) — set up a project, manage your instrumentation key, run your
+agent with guardrails wired in, and inspect audit trails, all from the terminal.
+
+```
+ ██████╗ ██╗      █████╗ ███████╗███████╗██████╗  ██████╗ ██╗  ██╗
+██╔════╝ ██║     ██╔══██╗██╔════╝██╔════╝██╔══██╗██╔═══██╗╚██╗██╔╝
+██║  ███╗██║     ███████║███████╗███████╗██████╔╝██║   ██║ ╚███╔╝
+╚██████╔╝███████╗██║  ██║███████║███████║██████╔╝╚██████╔╝██╔╝ ██╗
+```
+
+```bash
+glassbox init                      # scaffold .glassbox.json
+glassbox key set <KEY>             # store your instrumentation key
+glassbox key test                  # validate it against the backend
+glassbox doctor                    # environment + connectivity health check
+
+glassbox run -- python agent.py    # run your agent with glassbox wired in
+glassbox watch -- python agent.py  # ...then render the resulting trail
+
+glassbox verify trail.json         # check the hash chain
+glassbox show trail.json           # pretty-print steps + violations
+glassbox report trail.json         # generate a PDF/JSON report
+
+glassbox login                     # authenticate to the control plane
+glassbox status                    # workspace summary (traces, holds, spend)
+glassbox holds                     # list pending holds
+glassbox holds approve <ID>        # resolve one from the terminal
+```
+
+Your agent picks up the key that `run` injects with one line:
+
+```python
+from glassbox import AuditSession
+
+with AuditSession.from_env("loan underwriter") as audit:
+    ...   # GLASSBOX_KEY / API_URL come from the environment
+```
+
+Config resolves `--flag` → env (`GLASSBOX_KEY`, …) → project `.glassbox.json` →
+user `~/.glassbox/config.json`. Use `--json` for machine-readable output and
+`--plain` to drop colors/banner. Shell completion:
+`glassbox completion powershell|bash|zsh`.
+
+---
+
 ## The platform (`app/`)
 
 | Layer | Stack |
