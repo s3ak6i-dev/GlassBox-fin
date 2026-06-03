@@ -44,6 +44,11 @@ glassbox-fin = "glassbox.cli:main"
 [tool.hatch.build.targets.wheel]
 packages = ["glassbox"]
 
+# The sdist is the *library* only — not the web app under app/. Without this,
+# hatchling bundles the whole repo (backend + frontend source) into the tarball.
+[tool.hatch.build.targets.sdist]
+only-include = ["glassbox", "tests", "examples", "README.md", "LICENSE", "pyproject.toml"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
