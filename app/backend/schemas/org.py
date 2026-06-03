@@ -35,3 +35,10 @@ class WorkspaceResponse(ORMModel):
 class InviteRequest(BaseModel):
     email: EmailStr
     role: str = "developer"
+
+
+class InviteResponse(BaseModel):
+    id: str
+    email: str
+    role: str
+    temp_password: str   # shown once to the admin to share with the invitee

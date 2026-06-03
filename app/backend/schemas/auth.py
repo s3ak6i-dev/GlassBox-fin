@@ -28,6 +28,10 @@ class UpdateMeRequest(BaseModel):
     name: str
 
 
+class ChangePasswordRequest(BaseModel):
+    new_password: str
+
+
 class UserResponse(ORMModel):
     id: str
     email: str

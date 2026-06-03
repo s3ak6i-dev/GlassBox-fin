@@ -1,3 +1,5 @@
+import secrets
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -6,7 +8,7 @@ from app.backend.auth import get_current_user, hash_password
 from app.backend.db import get_db
 from app.backend.models.org import Organization, User
 from app.backend.schemas.auth import UserResponse
-from app.backend.schemas.org import InviteRequest, OrgResponse, OrgUpdate
+from app.backend.schemas.org import InviteRequest, InviteResponse, OrgResponse, OrgUpdate
 
 router = APIRouter(prefix="/api/org", tags=["org"])
 
@@ -49,7 +51,7 @@ async def list_members(user: User = Depends(get_current_user), db: AsyncSession 
     return result.scalars().all()
 
 
-@router.post("/invite", response_model=UserResponse, status_code=201)
+@router.post("/invite", response_model=InviteResponse, status_code=201)
 async def invite_member(
     body: InviteRequest,
     user: User = Depends(get_current_user),
@@ -58,13 +60,22 @@ async def invite_member(
     existing = await db.execute(select(User).where(User.email == body.email))
     if existing.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Email already registered")
+    # Generate a strong one-time password. Returned to the admin once so they
+    # can share it out-of-band; the invitee changes it from Settings on login.
+    temp_password = secrets.token_urlsafe(12)
     new_user = User(
         org_id=user.org_id,
         email=body.email,
-        password_hash=hash_password("change-on-first-login"),
+        password_hash=hash_password(temp_password),
+        auth_provider="email",
         role=body.role,
     )
     db.add(new_user)
     await db.commit()
     await db.refresh(new_user)
-    return new_user
+    return InviteResponse(
+        id=str(new_user.id),
+        email=new_user.email,
+        role=new_user.role,
+        temp_password=temp_password,
+    )

@@ -15,6 +15,9 @@ export const authApi = {
 
   updateMe: (token, data) =>
     apiFetch('/auth/me', { token, method: 'PUT', body: data }),
+
+  changePassword: (token, newPassword) =>
+    apiFetch('/auth/password', { token, method: 'POST', body: { new_password: newPassword } }),
 }
 
 export const configApi = {

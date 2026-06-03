@@ -6,16 +6,36 @@ build-backend = "hatchling.build"
 name = "glassbox-fin"
 version = "0.1.0a1"
 description = "Real-time compliance guardrails and audit trails for financial LLM agents"
+readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.10"
+authors = [{ name = "Surya", email = "slntmtrx@gmail.com" }]
+keywords = ["llm", "agents", "compliance", "audit", "guardrails", "ai-act", "observability", "fintech"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
 dependencies = ["reportlab>=4.0"]
+
+[project.urls]
+Homepage = "https://github.com/s3ak6i-dev/Glassdoor-fin"
+Repository = "https://github.com/s3ak6i-dev/Glassdoor-fin"
+Issues = "https://github.com/s3ak6i-dev/Glassdoor-fin/issues"
 
 [project.optional-dependencies]
 langchain  = ["langchain-core>=0.1.0"]
 llamaindex = ["llama-index-core>=0.10.0"]
 openai     = ["openai>=1.0.0"]
 anthropic  = ["anthropic>=0.20.0"]
-dev        = ["pytest>=7", "pytest-cov", "ruff"]
+dev        = ["pytest>=7", "pytest-cov", "ruff", "pytest-asyncio>=0.23", "httpx>=0.27", "aiosqlite>=0.20"]
 all        = ["glassbox-fin[langchain,llamaindex,openai,anthropic,dev]"]
 
 [project.scripts]
@@ -26,6 +46,7 @@ packages = ["glassbox"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+asyncio_mode = "auto"
 
 [tool.ruff]
 line-length = 100

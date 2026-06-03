@@ -64,17 +64,62 @@ function OrgTab() {
   }
 
   return (
+    <>
+      <Card brackets style={{ marginBottom: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 420 }}>
+          <Field label="Your name"><Input value={yourName} onChange={e => setYourName(e.target.value)} placeholder="How we greet you" /></Field>
+          <Field label="Organization name"><Input value={name} onChange={e => setName(e.target.value)} /></Field>
+          <Field label="Industry"><Input value={industry} onChange={e => setIndustry(e.target.value)} /></Field>
+          <Field label="Jurisdiction">
+            <select className="gb-input" value={jurisdiction} onChange={e => setJurisdiction(e.target.value)}>
+              {JURIS.map(j => <option key={j}>{j}</option>)}
+            </select>
+          </Field>
+          <div><Button variant="primary" onClick={save} disabled={saving}>{saving ? 'Saving…' : saved ? '✓ Saved' : 'Save changes'}</Button></div>
+        </div>
+      </Card>
+      <PasswordCard />
+    </>
+  )
+}
+
+function PasswordCard() {
+  const { token } = useAuth()
+  const [pw, setPw] = useState('')
+  const [confirm, setConfirm] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [done, setDone] = useState(false)
+  const [error, setError] = useState('')
+
+  const mismatch = confirm.length > 0 && pw !== confirm
+  const valid = pw.length >= 8 && pw === confirm
+
+  async function save() {
+    setError(''); setSaving(true)
+    try {
+      await authApi.changePassword(token, pw)
+      setPw(''); setConfirm('')
+      setDone(true); setTimeout(() => setDone(false), 2000)
+    } catch (e) {
+      setError(e.message || 'Could not update password')
+    } finally { setSaving(false) }
+  }
+
+  return (
     <Card brackets>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 420 }}>
-        <Field label="Your name"><Input value={yourName} onChange={e => setYourName(e.target.value)} placeholder="How we greet you" /></Field>
-        <Field label="Organization name"><Input value={name} onChange={e => setName(e.target.value)} /></Field>
-        <Field label="Industry"><Input value={industry} onChange={e => setIndustry(e.target.value)} /></Field>
-        <Field label="Jurisdiction">
-          <select className="gb-input" value={jurisdiction} onChange={e => setJurisdiction(e.target.value)}>
-            {JURIS.map(j => <option key={j}>{j}</option>)}
-          </select>
+        <div style={{ fontSize: 13, color: 'var(--ink-3)' }}>
+          Set or change your password. Use at least 8 characters.
+        </div>
+        <Field label="New password">
+          <Input type="password" value={pw} onChange={e => setPw(e.target.value)} placeholder="••••••••" autoComplete="new-password" />
         </Field>
-        <div><Button variant="primary" onClick={save} disabled={saving}>{saving ? 'Saving…' : saved ? '✓ Saved' : 'Save changes'}</Button></div>
+        <Field label="Confirm password">
+          <Input type="password" value={confirm} onChange={e => setConfirm(e.target.value)} placeholder="••••••••" autoComplete="new-password" />
+        </Field>
+        {mismatch && <span style={{ color: 'var(--critical)', fontSize: 12 }}>Passwords don’t match</span>}
+        {error && <span style={{ color: 'var(--critical)', fontSize: 12 }}>{error}</span>}
+        <div><Button variant="primary" onClick={save} disabled={!valid || saving}>{saving ? 'Saving…' : done ? '✓ Updated' : 'Update password'}</Button></div>
       </div>
     </Card>
   )
@@ -85,14 +130,24 @@ function TeamTab() {
   const [members, setMembers] = useState([])
   const [email, setEmail] = useState('')
   const [role, setRole] = useState('developer')
+  const [invited, setInvited] = useState(null)   // { email, temp_password }
+  const [copied, setCopied] = useState(false)
+  const [error, setError] = useState('')
 
   const load = () => orgApi.members(token).then(setMembers).catch(() => {})
   useEffect(() => { load() }, [token])
 
   async function invite() {
     if (!email.trim()) return
-    await orgApi.invite(token, email.trim(), role).catch(() => {})
-    setEmail(''); load()
+    setError('')
+    try {
+      const res = await orgApi.invite(token, email.trim(), role)
+      setInvited({ email: res.email, temp_password: res.temp_password })
+      setCopied(false)
+      setEmail(''); load()
+    } catch (e) {
+      setError(e.message || 'Could not send invite')
+    }
   }
 
   return (
@@ -106,6 +161,33 @@ function TeamTab() {
         </select>
         <Button variant="primary" onClick={invite} disabled={!email.trim()}>Invite</Button>
       </Card>
+
+      {error && (
+        <Card brackets style={{ marginBottom: 16, borderColor: 'rgba(var(--critical-rgb,255,90,90),0.5)' }}>
+          <span style={{ color: 'var(--critical)', fontSize: 13 }}>{error}</span>
+        </Card>
+      )}
+
+      {invited && (
+        <Card brackets style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 13, color: 'var(--ink-2)', marginBottom: 10 }}>
+            Invited <strong style={{ color: 'var(--ink)' }}>{invited.email}</strong>. Share this one-time
+            password with them — they can change it from <em>Settings → Organization</em> after signing in.
+            It won’t be shown again.
+          </div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <code style={{
+              flex: 1, fontFamily: 'var(--font-mono)', fontSize: 14, color: 'var(--cyan)',
+              background: 'var(--glass)', border: '1px solid var(--line-2)', borderRadius: 'var(--r-sm)',
+              padding: '10px 12px', userSelect: 'all',
+            }}>{invited.temp_password}</code>
+            <Button onClick={() => { navigator.clipboard?.writeText(invited.temp_password); setCopied(true) }}>
+              {copied ? '✓ Copied' : 'Copy'}
+            </Button>
+            <Button variant="ghost" onClick={() => setInvited(null)}>Dismiss</Button>
+          </div>
+        </Card>
+      )}
       <Card brackets style={{ padding: 0, overflow: 'hidden' }}>
         <div className="gb-table" style={{ border: 'none', borderRadius: 0 }}>
           {members.map(m => (

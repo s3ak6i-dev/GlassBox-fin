@@ -9,6 +9,7 @@ from app.backend.config import settings
 from app.backend.db import get_db
 from app.backend.models.org import Organization, User, Workspace
 from app.backend.schemas.auth import (
+    ChangePasswordRequest,
     GoogleAuthRequest,
     LoginRequest,
     SignupRequest,
@@ -117,3 +118,18 @@ async def update_me(
     await db.commit()
     await db.refresh(user)
     return user
+
+
+@router.post("/password", status_code=status.HTTP_204_NO_CONTENT)
+async def change_password(
+    body: ChangePasswordRequest,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    if len(body.new_password) < 8:
+        raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
+    user.password_hash = hash_password(body.new_password)
+    # An invited or Google user setting a password can now log in with email too.
+    if user.auth_provider != "email":
+        user.auth_provider = "email"
+    await db.commit()

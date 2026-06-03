@@ -26,7 +26,9 @@ app = FastAPI(title="glassbox API", version="0.1.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
-    allow_credentials=True,
+    # Auth is via Authorization: Bearer headers, not cookies — so credentials
+    # are not needed, which keeps a wildcard origin valid and safe.
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
