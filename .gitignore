@@ -43,4 +43,9 @@ postgres_data/
 Thumbs.db
 
 # Alembic
-app/backend/alembic/versions/*.pyc
+app/backend/migrations/versions/*.pyc
+
+# Local SQLite databases (tests / migration baseline scratch)
+*.db
+*.sqlite
+*.sqlite3

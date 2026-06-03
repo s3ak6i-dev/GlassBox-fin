@@ -1,4 +1,4 @@
-// Auto-extracted from GlassBox.html. Marketing copy lives here.
+// Auto-extracted from legacy/GlassBox.html (archived). Marketing copy lives here.
 export const LANDING_HTML = `<!-- ============================ NAV ============================ -->
 <nav class="nav">
   <div class="wrap nav-inner">
@@ -631,4 +631,9 @@ audit.<span class="c-fn">report</span>(<span class="c-str">"compliance.pdf"</spa
     </div>
     <div class="meta">v0.1.0-alpha · Apache 2.0</div>
   </div>
+  <p class="footer-disclaimer">
+    glassbox·fin is a software tool, not a law firm. References to the EU AI Act, MiFID II,
+    and other regulations are provided for informational purposes only and do not constitute
+    legal advice. Consult qualified counsel for your compliance obligations.
+  </p>
 </footer>`;

@@ -54,7 +54,13 @@ Open `http://localhost:8000`.
 See [`app/backend/.env.production.example`](../app/backend/.env.production.example).
 
 The schema is created automatically on first boot (`create_all`), so a fresh
-Neon database needs no migration step.
+Neon database boots with no extra steps.
+
+**Evolving the schema after launch** is managed with Alembic — see
+[`app/backend/migrations/README.md`](../app/backend/migrations/README.md). On an
+existing database, run `alembic stamp head` once to adopt migration tracking;
+thereafter use `alembic revision --autogenerate` + `alembic upgrade head`
+instead of manual `ALTER`s.
 
 ---
 
