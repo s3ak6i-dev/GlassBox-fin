@@ -1,6 +1,3 @@
-// Side-effect import: registers the webfonts so theme family names resolve.
-import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
-import { loadFont as loadMono } from "@remotion/google-fonts/JetBrainsMono";
-
-loadInter();
-loadMono();
+// Geist (Vercel) — display + mono. Self-hosted via fontsource, no network at render.
+import "@fontsource-variable/geist";
+import "@fontsource-variable/geist-mono";

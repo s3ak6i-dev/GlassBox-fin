@@ -11,7 +11,7 @@ export const ScenePayoff: React.FC = () => {
   const url = interpolate(frame, [150, 180], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: COLOR.base, justifyContent: "center", alignItems: "center", flexDirection: "column", gap: 24 }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", flexDirection: "column", gap: 24 }}>
       <GradientText style={{ fontFamily: FONT.display, fontSize: 130, fontWeight: 800, letterSpacing: "-0.04em" }}>
         glassbox
       </GradientText>

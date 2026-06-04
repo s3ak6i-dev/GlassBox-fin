@@ -1,4 +1,5 @@
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
+import { Float } from "../../components/Float";
 import { GlassPanel } from "../../components/GlassPanel";
 import { PushIn } from "../../components/PushIn";
 import { EXPO_OUT } from "../../lib/easings";
@@ -19,6 +20,7 @@ export const ProofHold: React.FC = () => {
   return (
     <PushIn>
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
+        <Float amount={0.6}>
         <GlassPanel
           style={{
             width: 760,
@@ -59,6 +61,7 @@ export const ProofHold: React.FC = () => {
             </div>
           </div>
         </GlassPanel>
+        </Float>
 
         {/* cyan confirmation check */}
         <div

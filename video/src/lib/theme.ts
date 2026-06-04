@@ -18,8 +18,8 @@ export const GRADIENT = `linear-gradient(180deg, ${GRADIENT_STOPS.join(", ")})`;
 export const GRADIENT_H = `linear-gradient(90deg, ${GRADIENT_STOPS.join(", ")})`;
 
 export const FONT = {
-  display: "Inter, system-ui, sans-serif", // swap for 'PP Neue Montreal' later
-  mono: "'JetBrains Mono', 'SF Mono', monospace",
+  display: "'Geist Variable', Inter, system-ui, sans-serif",
+  mono: "'Geist Mono Variable', 'JetBrains Mono', monospace",
 } as const;
 
 export const TRACKING = "-0.02em";

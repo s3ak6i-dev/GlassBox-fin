@@ -1,4 +1,5 @@
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
+import { Float } from "../../components/Float";
 import { GlassPanel } from "../../components/GlassPanel";
 import { GradientText } from "../../components/GradientText";
 import { PushIn } from "../../components/PushIn";
@@ -25,10 +26,13 @@ export const ProofTraces: React.FC = () => {
   return (
     <PushIn>
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
+        <Float>
         <GlassPanel style={{ width: 1100, padding: 36, fontFamily: FONT.mono }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
             <Banner />
-            <span style={{ color: COLOR.cyan, fontSize: 16 }}>● LIVE</span>
+            <span style={{ color: COLOR.cyan, fontSize: 16 }}>
+              {Math.round(interpolate(frame, [0, 140], [118, 142], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }))} traces · ● LIVE
+            </span>
           </div>
           {ROWS.map((r, i) => {
             const start = 18 + i * 12;
@@ -60,6 +64,7 @@ export const ProofTraces: React.FC = () => {
             );
           })}
         </GlassPanel>
+        </Float>
       </AbsoluteFill>
     </PushIn>
   );

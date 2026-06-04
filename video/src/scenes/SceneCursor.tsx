@@ -15,7 +15,6 @@ export const SceneCursor: React.FC = () => {
   return (
     <AbsoluteFill
       style={{
-        backgroundColor: COLOR.base,
         justifyContent: "center",
         alignItems: "center",
       }}

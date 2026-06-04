@@ -14,9 +14,7 @@ export const SceneQuestion: React.FC = () => {
   const dim = interpolate(frame, [270, 280], [1, 0.25], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill
-      style={{ backgroundColor: COLOR.base, justifyContent: "center", alignItems: "center" }}
-    >
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
       <BlurReveal
         text="can you prove what they did?"
         delay={12}

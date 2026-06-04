@@ -10,3 +10,5 @@ export const OUT_CUBIC = Easing.out(Easing.cubic);
 export const SPRING_PANEL = { stiffness: 100, damping: 14, mass: 1 } as const;
 export const SPRING_POP = { stiffness: 200, damping: 12, mass: 0.8 } as const;
 export const SPRING_SOFT = { stiffness: 60, damping: 16, mass: 1 } as const;
+export const SPRING_SNAP = { stiffness: 220, damping: 18, mass: 1 } as const; // crisp, slight overshoot
+export const SPRING_BOUNCE = { stiffness: 170, damping: 9, mass: 1 } as const; // visible overshoot

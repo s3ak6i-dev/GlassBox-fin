@@ -1,29 +1,41 @@
-import { AbsoluteFill, Sequence } from "remotion";
-import { PROOF } from "../lib/beats";
+import { linearTiming, TransitionSeries } from "@remotion/transitions";
+import { slide } from "@remotion/transitions/slide";
+import { wipe } from "@remotion/transitions/wipe";
+import { EXPO_OUT } from "../lib/easings";
+import { PROOF_DUR, TR } from "../lib/beats";
 import { ProofFleet } from "./proof/ProofFleet";
 import { ProofHash } from "./proof/ProofHash";
 import { ProofHold } from "./proof/ProofHold";
 import { ProofReport } from "./proof/ProofReport";
 import { ProofTraces } from "./proof/ProofTraces";
 
-// S5 · Proof montage — clean cuts on the downbeat (see STORYBOARD beat map).
-// Whoosh-wipe transitions are a later polish; cutting on-beat reads premium.
+const timing = linearTiming({ durationInFrames: TR, easing: EXPO_OUT });
+
+// S5 · Proof montage — fluid whoosh transitions, each cut on the beat.
 export const SceneProof: React.FC = () => (
-  <AbsoluteFill>
-    <Sequence from={PROOF.traces.from} durationInFrames={PROOF.traces.duration}>
+  <TransitionSeries>
+    <TransitionSeries.Sequence durationInFrames={PROOF_DUR.traces}>
       <ProofTraces />
-    </Sequence>
-    <Sequence from={PROOF.hold.from} durationInFrames={PROOF.hold.duration}>
+    </TransitionSeries.Sequence>
+    <TransitionSeries.Transition timing={timing} presentation={slide({ direction: "from-right" })} />
+
+    <TransitionSeries.Sequence durationInFrames={PROOF_DUR.hold}>
       <ProofHold />
-    </Sequence>
-    <Sequence from={PROOF.hash.from} durationInFrames={PROOF.hash.duration}>
+    </TransitionSeries.Sequence>
+    <TransitionSeries.Transition timing={timing} presentation={slide({ direction: "from-right" })} />
+
+    <TransitionSeries.Sequence durationInFrames={PROOF_DUR.hash}>
       <ProofHash />
-    </Sequence>
-    <Sequence from={PROOF.fleet.from} durationInFrames={PROOF.fleet.duration}>
+    </TransitionSeries.Sequence>
+    <TransitionSeries.Transition timing={timing} presentation={wipe({ direction: "from-left" })} />
+
+    <TransitionSeries.Sequence durationInFrames={PROOF_DUR.fleet}>
       <ProofFleet />
-    </Sequence>
-    <Sequence from={PROOF.report.from} durationInFrames={PROOF.report.duration}>
+    </TransitionSeries.Sequence>
+    <TransitionSeries.Transition timing={timing} presentation={slide({ direction: "from-bottom" })} />
+
+    <TransitionSeries.Sequence durationInFrames={PROOF_DUR.report}>
       <ProofReport />
-    </Sequence>
-  </AbsoluteFill>
+    </TransitionSeries.Sequence>
+  </TransitionSeries>
 );
