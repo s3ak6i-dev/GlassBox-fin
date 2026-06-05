@@ -50,8 +50,21 @@ Open `http://localhost:8000`.
 | `ACCESS_TOKEN_EXPIRE_DAYS` | — | Default `7`. |
 | `CORS_ORIGINS` | — | `*` for same-origin serving; list frontend origins if you split hosts. |
 | `PORT` | — | Injected by the host; container binds it. |
+| `GOOGLE_CLIENT_ID` | — | Enables "Sign in with Google". |
+| `SENTRY_DSN` | — | Enables error tracking. Leave unset to disable. |
+| `ENVIRONMENT` | — | `production` / `staging` — tags Sentry + logs. |
+| `LOG_LEVEL` | — | Default `INFO`. Logs are structured JSON on stdout. |
+| `RATE_LIMIT_ENABLED` | — | Default `true`. Auth = 10/min/IP, ingest = 240/min/key. |
 
 See [`app/backend/.env.production.example`](../app/backend/.env.production.example).
+
+## Production hardening (built in)
+- **Rate limiting** (slowapi): auth endpoints throttled per IP, ingest per
+  instrumentation key — a leaked key can't write unbounded traces. In-memory per
+  process (fine for the single-worker SSE setup); move to Redis when scaling out.
+- **Error tracking**: set `SENTRY_DSN` and exceptions report automatically.
+- **Structured logging**: every `/api/*` request logs as JSON (method, path,
+  status, ms) to stdout — ready for any log aggregator.
 
 The schema is created automatically on first boot (`create_all`), so a fresh
 Neon database boots with no extra steps.

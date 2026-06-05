@@ -16,6 +16,12 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://localhost:3000"
     google_client_id: str = ""   # set to enable "Sign in with Google"
 
+    # Ops / observability
+    environment: str = "development"
+    log_level: str = "INFO"
+    sentry_dsn: str = ""              # set to enable error tracking
+    rate_limit_enabled: bool = True   # disabled in the test suite
+
     @property
     def cors_origins_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

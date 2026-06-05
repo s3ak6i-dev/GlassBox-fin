@@ -1,12 +1,13 @@
 import re
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.backend.auth import create_access_token, get_current_user, hash_password, verify_password
 from app.backend.config import settings
 from app.backend.db import get_db
+from app.backend.ratelimit import AUTH_LIMIT, limiter
 from app.backend.models.org import Organization, User, Workspace
 from app.backend.schemas.auth import (
     ChangePasswordRequest,
@@ -53,7 +54,8 @@ async def _create_org_with_user(
 
 
 @router.post("/signup", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
-async def signup(body: SignupRequest, db: AsyncSession = Depends(get_db)):
+@limiter.limit(AUTH_LIMIT)
+async def signup(request: Request, body: SignupRequest, db: AsyncSession = Depends(get_db)):
     existing = await db.execute(select(User).where(User.email == body.email))
     if existing.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -65,7 +67,8 @@ async def signup(body: SignupRequest, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/login", response_model=TokenResponse)
-async def login(body: LoginRequest, db: AsyncSession = Depends(get_db)):
+@limiter.limit(AUTH_LIMIT)
+async def login(request: Request, body: LoginRequest, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(User).where(User.email == body.email))
     user = result.scalar_one_or_none()
     if not user or not user.password_hash or not verify_password(body.password, user.password_hash):
@@ -74,7 +77,8 @@ async def login(body: LoginRequest, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/google", response_model=TokenResponse)
-async def google_login(body: GoogleAuthRequest, db: AsyncSession = Depends(get_db)):
+@limiter.limit(AUTH_LIMIT)
+async def google_login(request: Request, body: GoogleAuthRequest, db: AsyncSession = Depends(get_db)):
     if not settings.google_client_id:
         raise HTTPException(status_code=400, detail="Google sign-in is not configured")
     try:
@@ -121,7 +125,9 @@ async def update_me(
 
 
 @router.post("/password", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit(AUTH_LIMIT)
 async def change_password(
+    request: Request,
     body: ChangePasswordRequest,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),

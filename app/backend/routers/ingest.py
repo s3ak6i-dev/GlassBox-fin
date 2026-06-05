@@ -2,11 +2,12 @@ import hashlib
 import uuid
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.backend.db import get_db
+from app.backend.ratelimit import INGEST_LIMIT, glassbox_key_func, limiter
 from app.backend.events import bus
 from app.backend.models.fleet import Agent
 from app.backend.models.spend import SpendRecord
@@ -70,7 +71,9 @@ def _make_step(trace_db_id: uuid.UUID, body: StepIngest) -> StoredStep:
 # ── POST /api/ingest/trace/start ─────────────────────────────────────────────
 
 @router.post("/trace/start", status_code=201)
+@limiter.limit(INGEST_LIMIT, key_func=glassbox_key_func)
 async def trace_start(
+    request: Request,
     body: TraceStartIngest,
     agent: Agent = Depends(_get_agent_dep),
     db: AsyncSession = Depends(get_db),
@@ -101,7 +104,9 @@ async def trace_start(
 # ── POST /api/ingest/trace/{trace_id}/step ───────────────────────────────────
 
 @router.post("/trace/{trace_id}/step", status_code=201)
+@limiter.limit(INGEST_LIMIT, key_func=glassbox_key_func)
 async def trace_step(
+    request: Request,
     trace_id: str,
     body: StepIngest,
     agent: Agent = Depends(_get_agent_dep),
@@ -147,7 +152,9 @@ async def trace_step(
 # ── POST /api/ingest/trace/{trace_id}/end ────────────────────────────────────
 
 @router.post("/trace/{trace_id}/end", status_code=200)
+@limiter.limit(INGEST_LIMIT, key_func=glassbox_key_func)
 async def trace_end(
+    request: Request,
     trace_id: str,
     body: TraceEndIngest,
     agent: Agent = Depends(_get_agent_dep),
@@ -215,7 +222,9 @@ async def trace_end(
 # ── POST /api/ingest/hold ─────────────────────────────────────────────────────
 
 @router.post("/hold", status_code=201)
+@limiter.limit(INGEST_LIMIT, key_func=glassbox_key_func)
 async def create_hold(
+    request: Request,
     body: HoldCreateIngest,
     agent: Agent = Depends(_get_agent_dep),
     db: AsyncSession = Depends(get_db),
