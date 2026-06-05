@@ -10,6 +10,11 @@ portable to SQLite for DDL purposes:
 A single shared connection (StaticPool) is used so every session in a test sees
 the same in-memory schema and rows.
 """
+import os
+
+# Disable rate limiting before the app (and its settings) are imported.
+os.environ.setdefault("RATE_LIMIT_ENABLED", "false")
+
 import asyncio
 import uuid
 
